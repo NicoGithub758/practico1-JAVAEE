@@ -1,0 +1,47 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>taller</groupId>
+        <artifactId>practico1</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>practico1-web</artifactId>
+    <packaging>war</packaging>
+
+    <name>practico1-web</name>
+
+    <dependencies>
+        <!-- Dependencia a la API de Jakarta EE -->
+        <dependency>
+            <groupId>jakarta.platform</groupId>
+            <artifactId>jakarta.jakartaee-api</artifactId>
+            <version>10.0.0</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- ¡Dependencia a nuestro módulo EJB! -->
+        <dependency>
+            <groupId>taller</groupId>
+            <artifactId>practico1-ejb</artifactId>
+            <version>${project.version}</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <finalName>${project.artifactId}</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>3.4.0</version>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
