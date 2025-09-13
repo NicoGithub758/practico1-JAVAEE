@@ -11,10 +11,23 @@
     <name>practico1</name>
 
     <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>24</maven.compiler.source>
-        <maven.compiler.target>24</maven.compiler.target>
-        <maven.compiler.release>21</maven.compiler.release>
+          <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+      <!-- CAMBIADO a Java 11 para que coincida con el builder de OpenShift -->
+      <maven.compiler.source>11</maven.compiler.source>
+      <maven.compiler.target>11</maven.compiler.target>
+      
+      <!-- CAMBIADAS a versiones de plugins estables y compatibles con Java 11 -->
+      <version.compiler.plugin>3.8.1</version.compiler.plugin>
+      <version.ear.plugin>3.2.0</version.ear.plugin>
+      <version.ejb.plugin>3.1.0</version.ejb.plugin>
+      <version.war.plugin>3.3.2</version.war.plugin>
+      
+      <!-- El resto de propiedades las podemos dejar como estaban -->
+      <version.wildfly.maven.plugin>5.1.3.Final</version.wildfly.maven.plugin>
+      <version.wildfly.bom>37.0.0.Final</version.wildfly.bom>
+      <version.junit5>5.13.4</version.junit5>
+      <version.failsafe.plugin>3.5.3</version.failsafe.plugin>
     </properties>
 
     <modules>

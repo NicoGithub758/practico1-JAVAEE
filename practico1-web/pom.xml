@@ -24,6 +24,14 @@
             <scope>provided</scope>
         </dependency>
 
+        <!-- Dependencia para Jakarta Server Faces (JSF) -->
+        <dependency>
+            <groupId>jakarta.faces</groupId>
+            <artifactId>jakarta.faces-api</artifactId>
+            <version>4.0.1</version> <!-- O la versión más reciente compatible -->
+            <scope>provided</scope>
+        </dependency>
+
         <!-- ¡Dependencia a nuestro módulo EJB! -->
         <dependency>
             <groupId>taller</groupId>
