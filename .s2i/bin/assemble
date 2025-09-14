@@ -1,11 +1,33 @@
 #!/bin/bash
-set -e
+# Assemble custom para proyecto Maven multi-módulo con WildFly S2I
 
-echo "Ejecutando build Maven..."
+set -e  # Salir si hay error
+echo "=== Iniciando assemble custom WildFly S2I ==="
+
+# 1️⃣ Ir al directorio donde OpenShift clona el repo dentro del contenedor
+SRC_DIR=/tmp/src
+if [ ! -d "$SRC_DIR" ]; then
+    echo "ERROR: No se encontró el directorio de origen $SRC_DIR"
+    exit 1
+fi
+cd "$SRC_DIR"
+
+# 2️⃣ Ejecutar Maven para compilar todos los módulos (EAR, EJB, WAR)
+echo "Ejecutando Maven clean install (omitimos tests)..."
 mvn clean install -DskipTests
 
-# Path de despliegue correcto en la imagen
+# 3️⃣ Verificar que el EAR se generó correctamente
+EAR_FILE="$SRC_DIR/practico1-ear/target/practico1.ear"
+if [ ! -f "$EAR_FILE" ]; then
+    echo "ERROR: No se encontró el archivo EAR en $EAR_FILE"
+    exit 1
+fi
+
+# 4️⃣ Directorio donde WildFly S2I despliega automáticamente
 DEPLOYMENTS_DIR=/deployments
 
-echo "Copiando EAR a $DEPLOYMENTS_DIR..."
-cp practico1-ear/target/practico1.ear $DEPLOYMENTS_DIR/
+# 5️⃣ Copiar el EAR al directorio de despliegue
+echo "Copiando $EAR_FILE a $DEPLOYMENTS_DIR..."
+cp "$EAR_FILE" "$DEPLOYMENTS_DIR/"
+
+echo "=== Assemble completado correctamente ==="
