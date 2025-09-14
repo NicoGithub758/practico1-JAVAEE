@@ -1,0 +1,11 @@
+#!/bin/bash
+set -e
+
+echo "Ejecutando build Maven..."
+mvn clean install -DskipTests
+
+# Path de despliegue correcto en la imagen
+DEPLOYMENTS_DIR=/deployments
+
+echo "Copiando EAR a $DEPLOYMENTS_DIR..."
+cp practico1-ear/target/practico1.ear $DEPLOYMENTS_DIR/
