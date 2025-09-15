@@ -33,25 +33,56 @@
     </dependencies>
 
     <build>
-        <finalName>${project.parent.artifactId}</finalName>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-ear-plugin</artifactId>
-                <version>3.3.0</version>
-                <configuration>
-                    <version>10</version>
-                    <defaultLibBundleDir>lib</defaultLibBundleDir>
-                    <modules>
-                        <webModule>
-                            <groupId>taller</groupId>
-                            <artifactId>practico1-web</artifactId>
-                            <contextRoot>/practico1</contextRoot>
-                        </webModule>
-                    </modules>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
+    <!-- Esto se mantiene igual: define el nombre del archivo .ear -->
+    <finalName>${project.parent.artifactId}</finalName>
+    <plugins>
+        <!-- ESTE ES TU PLUGIN ORIGINAL: Es el que arma el archivo .ear. Se mantiene sin cambios. -->
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-ear-plugin</artifactId>
+            <version>3.3.0</version>
+            <configuration>
+                <version>10</version>
+                <defaultLibBundleDir>lib</defaultLibBundleDir>
+                <modules>
+                    <webModule>
+                        <groupId>taller</groupId>
+                        <artifactId>practico1-web</artifactId>
+                        <contextRoot>/practico1</contextRoot>
+                    </webModule>
+                </modules>
+            </configuration>
+        </plugin>
+
+        <!-- AÑADIDO: Este es el nuevo plugin que soluciona el problema de OpenShift. -->
+        <!-- Su única función es copiar el .ear final a la carpeta target de la raíz del proyecto. -->
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-dependency-plugin</artifactId>
+            <version>3.6.0</version>
+            <executions>
+                <execution>
+                    <id>copy-ear-to-root-target</id>
+                    <phase>package</phase>
+                    <goals>
+                        <goal>copy</goal>
+                    </goals>
+                    <configuration>
+                        <artifactItems>
+                            <artifactItem>
+                                <groupId>${project.groupId}</groupId>
+                                <artifactId>${project.artifactId}</artifactId>
+                                <version>${project.version}</version>
+                                <type>${project.packaging}</type>
+                                <destFileName>ROOT.ear</destFileName>
+                            </artifactItem>
+                        </artifactItems>
+                        <outputDirectory>${project.basedir}/../../target</outputDirectory>
+                    </configuration>
+                </execution>
+            </executions>
+        </plugin>
+    </plugins>
+</build>
 
 </project>
