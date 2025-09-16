@@ -12,21 +12,15 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <!-- Compilamos con Java 17, compatible con los servidores Jakarta EE modernos -->
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         
-        <!-- Versiones de plugins compatibles -->
+        <!-- Versiones de plugins (se mantienen igual, son compatibles) -->
         <version.compiler.plugin>3.8.1</version.compiler.plugin>
         <version.ear.plugin>3.3.0</version.ear.plugin>
         <version.ejb.plugin>3.1.0</version.ejb.plugin>
         <version.war.plugin>3.3.2</version.war.plugin>
-        
-        <!-- Versiones explícitas de las APIs de Java EE 8 (javax) -->
-        <version.cdi.api>2.0.SP1</version.cdi.api>
-        <version.ejb.api>2.0.0.Final</version.ejb.api>
-        <version.annotations.api>2.0.1.Final</version.annotations.api>
-        <version.servlet.api>2.0.0.Final</version.servlet.api>
-        <version.jsf.api>3.0.0.SP04</version.jsf.api>
     </properties>
 
     <modules>
@@ -35,42 +29,31 @@
         <module>practico1-ear</module>
     </modules>
 
+    <!--
+      El bloque <dependencyManagement> define las versiones de las dependencias
+      para todos los submódulos.
+    -->
     <dependencyManagement>
         <dependencies>
-            <!-- Java EE 8 APIs (con versiones explícitas) -->
+            <!--
+              ESTA ES LA ÚNICA DEPENDENCIA DE API QUE NECESITAS.
+              Reemplaza a todas las dependencias individuales de cdi-api, jboss-ejb-api, etc.
+              Define el "paraguas" de APIs de Jakarta EE 9.1.
+            -->
             <dependency>
-                <groupId>javax.enterprise</groupId>
-                <artifactId>cdi-api</artifactId>
-                <version>${version.cdi.api}</version>
-                <scope>provided</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.jboss.spec.javax.ejb</groupId>
-                <artifactId>jboss-ejb-api_3.2_spec</artifactId>
-                <version>${version.ejb.api}</version>
-                <scope>provided</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.jboss.spec.javax.annotation</groupId>
-                <artifactId>jboss-annotations-api_1.3_spec</artifactId>
-                <version>${version.annotations.api}</version>
-                <scope>provided</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.jboss.spec.javax.servlet</groupId>
-                <artifactId>jboss-servlet-api_4.0_spec</artifactId>
-                <version>${version.servlet.api}</version>
-                <scope>provided</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.jboss.spec.javax.faces</groupId>
-                <artifactId>jboss-jsf-api_2.3_spec</artifactId>
-                <version>${version.jsf.api}</version>
-                <scope>provided</scope>
+                <groupId>jakarta.platform</groupId>
+                <artifactId>jakarta.jakartaee-api</artifactId>
+                <version>9.1.0</version>
+                <type>pom</type> <!-- Importante: se importa como un pom para gestionar otras dependencias -->
+                <scope>import</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>
 
+    <!--
+      Los plugins se mantienen igual, ya que son parte del ciclo de vida de Maven
+      y no dependen de las APIs de Jakarta EE.
+    -->
     <build>
         <pluginManagement>
             <plugins>
