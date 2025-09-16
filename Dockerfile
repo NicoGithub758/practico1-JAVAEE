@@ -1,6 +1,6 @@
 ### STAGE 1: The Builder ###
 # Usamos una imagen que tiene Maven y Java (JDK 11 en este caso, ajústalo si es necesario)
-FROM maven:3.8-openjdk-11 AS builder
+FROM maven:3-eclipse-temurin-17 AS builder
 
 # Establecemos el directorio de trabajo dentro del contenedor
 WORKDIR /app
