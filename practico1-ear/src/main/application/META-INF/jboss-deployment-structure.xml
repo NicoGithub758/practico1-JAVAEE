@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jboss-deployment-structure>
+    <!--
+        Esta sección le dice a WildFly que tu .war depende del módulo JSF del servidor.
+        Sin esto, la clase javax.faces.webapp.FacesServlet no se encuentra.
+    -->
+    <sub-deployment name="taller-practico1-web-1.0-SNAPSHOT.war">
+        <dependencies>
+           <module name="jakarta.faces.api"/>
+           <module name="org.wildfly.extension.faces.jsf-impl"/>
+           
+        </dependencies>
+    </sub-deployment>
+</jboss-deployment-structure>
