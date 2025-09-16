@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="https://jakarta.ee/xml/ns/jakartaee"
+<beans xmlns="http://xmlns.jcp.org/xml/ns/javaee"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/beans_4_0.xsd"
-       bean-discovery-mode="annotated">
+       xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/beans_2_0.xsd"
+       bean-discovery-mode="annotated"
+       version="2.0">
 </beans>
-```*   `bean-discovery-mode="annotated"`: Es una optimización que le dice al servidor que solo considere como beans las clases que tengan una anotación de bean (como `@Named`, `@ApplicationScoped`, etc.).
-
----
 
