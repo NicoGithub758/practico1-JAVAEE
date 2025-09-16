@@ -1,7 +1,7 @@
 package taller.practico1;
 
 import java.util.List;
-import jakarta.ejb.Remote;
+import javax.ejb.Remote;
 
 @Remote // La única diferencia
 public interface TrabajadorSaludDAORemote {

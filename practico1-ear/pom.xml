@@ -11,51 +11,45 @@
 
     <artifactId>practico1-ear</artifactId>
     <packaging>ear</packaging>
-
     <name>practico1-ear</name>
 
     <dependencies>
-        <!-- Incluimos el módulo EJB -->
+        <!-- 
+          Declaramos qué módulos van dentro del EAR.
+          Maven obtiene las versiones del <dependencyManagement> del padre.
+        -->
         <dependency>
-            <groupId>taller</groupId>
-            <artifactId>practico1-ejb</artifactId>
-            <version>${project.version}</version>
-            <type>ejb</type>
-        </dependency>
-
-        <!-- Incluimos el módulo Web -->
-        <dependency>
-            <groupId>taller</groupId>
+            <groupId>${project.groupId}</groupId>
             <artifactId>practico1-web</artifactId>
-            <version>${project.version}</version>
             <type>war</type>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>practico1-ejb</artifactId>
+            <type>ejb</type>
         </dependency>
     </dependencies>
 
     <build>
-    <!-- Esto se mantiene igual: define el nombre del archivo .ear -->
-    <finalName>${project.parent.artifactId}</finalName>
-    <plugins>
-        <!-- ESTE ES TU PLUGIN ORIGINAL: Es el que arma el archivo .ear. Se mantiene sin cambios. -->
-        <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-ear-plugin</artifactId>
-            <version>3.3.0</version>
-            <configuration>
-                <version>10</version>
-                <defaultLibBundleDir>lib</defaultLibBundleDir>
-                <modules>
-                    <webModule>
-                        <groupId>taller</groupId>
-                        <artifactId>practico1-web</artifactId>
-                        <contextRoot>/practico1</contextRoot>
-                    </webModule>
-                </modules>
-            </configuration>
-        </plugin>
-
-
-    </plugins>
-</build>
-
+        <finalName>${project.parent.artifactId}</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-ear-plugin</artifactId>
+                <version>${version.ear.plugin}</version>
+                <configuration>
+                    <!-- Usamos la versión de EAR compatible con Java EE 8 -->
+                    <version>8</version>
+                    <defaultLibBundleDir>lib</defaultLibBundleDir>
+                    <modules>
+                        <webModule>
+                            <groupId>${project.groupId}</groupId>
+                            <artifactId>practico1-web</artifactId>
+                            <contextRoot>/practico1</contextRoot>
+                        </webModule>
+                    </modules>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>

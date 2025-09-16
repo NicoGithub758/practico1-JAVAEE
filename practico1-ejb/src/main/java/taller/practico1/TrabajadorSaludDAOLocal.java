@@ -1,7 +1,7 @@
 package taller.practico1;
 
 import java.util.List;
-import jakarta.ejb.Local;
+import javax.ejb.Local;
 
 @Local
 public interface TrabajadorSaludDAOLocal {

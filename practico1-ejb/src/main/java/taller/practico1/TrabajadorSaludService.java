@@ -1,8 +1,8 @@
 package taller.practico1;
 
 import java.util.List;
-import jakarta.ejb.EJB;
-import jakarta.ejb.Stateless;
+import javax.ejb.EJB;
+import javax.ejb.Stateless;
 
 @Stateless
 public class TrabajadorSaludService implements TrabajadorSaludServiceLocal {

@@ -4,12 +4,12 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
 
-import jakarta.annotation.PostConstruct;
-import jakarta.ejb.EJB;
-import jakarta.faces.application.FacesMessage; // Importante para mostrar mensajes
-import jakarta.faces.context.FacesContext;   // Importante para mostrar mensajes
-import jakarta.faces.view.ViewScoped;
-import jakarta.inject.Named;
+import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
+import javax.faces.application.FacesMessage; // Importante para mostrar mensajes
+import javax.faces.context.FacesContext;   // Importante para mostrar mensajes
+import javax.faces.view.ViewScoped;
+import javax.inject.Named;
 import taller.practico1.TrabajadorSalud;
 import taller.practico1.TrabajadorSaludServiceLocal;
 

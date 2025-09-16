@@ -1,27 +1,12 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-
+<project xmlns="http://maven.apache.org/POM/4.0.0" 
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>taller</groupId>
     <artifactId>practico1</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
-
     <name>practico1</name>
-
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <!-- Compilamos con Java 17, compatible con los servidores Jakarta EE modernos -->
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
-        
-        <!-- Versiones de plugins (se mantienen igual, son compatibles) -->
-        <version.compiler.plugin>3.8.1</version.compiler.plugin>
-        <version.ear.plugin>3.3.0</version.ear.plugin>
-        <version.ejb.plugin>3.1.0</version.ejb.plugin>
-        <version.war.plugin>3.3.2</version.war.plugin>
-    </properties>
 
     <modules>
         <module>practico1-ejb</module>
@@ -29,31 +14,53 @@
         <module>practico1-ear</module>
     </modules>
 
-    <!--
-      El bloque <dependencyManagement> define las versiones de las dependencias
-      para todos los submódulos.
-    -->
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.release>11</maven.compiler.release>
+
+        <!-- Versiones de plugins -->
+        <version.compiler.plugin>3.8.1</version.compiler.plugin>
+        <version.ear.plugin>3.3.0</version.ear.plugin>
+        <version.ejb.plugin>3.1.0</version.ejb.plugin>
+        <version.war.plugin>3.3.2</version.war.plugin>
+        
+        <!--
+          Definimos explícitamente las versiones de las APIs de Java EE 8 (javax)
+          para que los módulos hijos puedan usarlas.
+        -->
+        <version.jakarta.ee>8.0.0</version.jakarta.ee>
+    </properties>
+
     <dependencyManagement>
         <dependencies>
-            <!--
-              ESTA ES LA ÚNICA DEPENDENCIA DE API QUE NECESITAS.
-              Reemplaza a todas las dependencias individuales de cdi-api, jboss-ejb-api, etc.
-              Define el "paraguas" de APIs de Jakarta EE 9.1.
+            <!-- 
+              Gestionamos centralmente las versiones de las APIs de Java EE 8.
+              Los módulos hijos solo necesitan especificar el groupId y artifactId.
             -->
             <dependency>
                 <groupId>jakarta.platform</groupId>
                 <artifactId>jakarta.jakartaee-api</artifactId>
-                <version>9.1.0</version>
-                <type>pom</type> <!-- Importante: se importa como un pom para gestionar otras dependencias -->
-                <scope>import</scope>
+                <version>${version.jakarta.ee}</version>
+                <scope>provided</scope>
+            </dependency>
+            
+            <!-- Gestionamos las dependencias entre nuestros propios módulos -->
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>practico1-ejb</artifactId>
+                <version>${project.version}</version>
+                <type>ejb</type>
+            </dependency>
+            
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>practico1-web</artifactId>
+                <version>${project.version}</version>
+                <type>war</type>
             </dependency>
         </dependencies>
     </dependencyManagement>
 
-    <!--
-      Los plugins se mantienen igual, ya que son parte del ciclo de vida de Maven
-      y no dependen de las APIs de Jakarta EE.
-    -->
     <build>
         <pluginManagement>
             <plugins>
@@ -61,6 +68,11 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
                     <version>${version.compiler.plugin}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-ear-plugin</artifactId>
+                    <version>${version.ear.plugin}</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -72,13 +84,7 @@
                     <artifactId>maven-war-plugin</artifactId>
                     <version>${version.war.plugin}</version>
                 </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-ear-plugin</artifactId>
-                    <version>${version.ear.plugin}</version>
-                </plugin>
             </plugins>
         </pluginManagement>
     </build>
-
 </project>
