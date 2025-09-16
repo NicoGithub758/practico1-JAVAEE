@@ -1,27 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<web-app xmlns="https://jakarta.ee/xml/ns/jakartaee"
+<!--
+  Este es el descriptor de despliegue para Java EE 8 / Servlet 4.0.
+  Es compatible con tu pom.xml y con el servidor WildFly que estamos usando.
+-->
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd"
-         version="6.0">
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
+         version="4.0">
 
+    <!-- El PROJECT_STAGE se configura igual, pero con el namespace javax -->
     <context-param>
-        <param-name>jakarta.faces.PROJECT_STAGE</param-name>
+        <param-name>javax.faces.PROJECT_STAGE</param-name>
         <param-value>Development</param-value>
     </context-param>
-    
+
+    <!-- Se define el servlet, pero usando la clase javax.faces.webapp.FacesServlet -->
     <servlet>
         <servlet-name>Faces Servlet</servlet-name>
-        <servlet-class>jakarta.faces.webapp.FacesServlet</servlet-class>
+        <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
         <load-on-startup>1</load-on-startup>
     </servlet>
 
-    <!-- Mapea todas las peticiones que terminen en .xhtml para que sean procesadas por JSF -->
+    <!-- El mapeo es idéntico -->
     <servlet-mapping>
         <servlet-name>Faces Servlet</servlet-name>
         <url-pattern>*.xhtml</url-pattern>
     </servlet-mapping>
-    
-    <!-- Opcional: define la página de inicio -->
+
+    <!-- La lista de bienvenida es idéntica, apuntando a tu página principal -->
     <welcome-file-list>
         <welcome-file>TrabajadorSaludVista.xhtml</welcome-file>
     </welcome-file-list>
