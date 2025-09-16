@@ -1,33 +1,17 @@
-#!/bin/bash
-# Assemble custom para proyecto Maven multi-módulo con WildFly S2I
 
-set -e  # Salir si hay error
-echo "=== Iniciando assemble custom WildFly S2I ==="
+echo "--- Iniciando script de assemble PERSONALIZADO ---"
 
-# 1️⃣ Ir al directorio donde OpenShift clona el repo dentro del contenedor
-SRC_DIR=/tmp/src
-if [ ! -d "$SRC_DIR" ]; then
-    echo "ERROR: No se encontró el directorio de origen $SRC_DIR"
-    exit 1
-fi
-cd "$SRC_DIR"
+# 1. Instalar Maven
+# Descargamos Maven, lo descomprimimos y lo añadimos al PATH.
+echo "-> Instalando Maven..."
+curl -s https://dlcdn.apache.org/maven/maven-3/3.9.6/binaries/apache-maven-3.9.6-bin.tar.gz -o /tmp/maven.tar.gz
+tar -xzf /tmp/maven.tar.gz -C /tmp
+export PATH=/tmp/apache-maven-3.9.6/bin:$PATH
+echo "Maven instalado en: $(mvn -v)"
 
-# 2️⃣ Ejecutar Maven para compilar todos los módulos (EAR, EJB, WAR)
-echo "Ejecutando Maven clean install (omitimos tests)..."
-mvn clean install -DskipTests
+# 2. Ejecutar el script 'assemble' original de la imagen
+# Ahora que 'mvn' existe, el script original funcionará.
+echo "-> Ejecutando el script de assemble original de la imagen S2I..."
+/usr/libexec/s2i/assemble
 
-# 3️⃣ Verificar que el EAR se generó correctamente
-EAR_FILE="$SRC_DIR/practico1-ear/target/practico1.ear"
-if [ ! -f "$EAR_FILE" ]; then
-    echo "ERROR: No se encontró el archivo EAR en $EAR_FILE"
-    exit 1
-fi
-
-# 4️⃣ Directorio donde WildFly S2I despliega automáticamente
-DEPLOYMENTS_DIR=/deployments
-
-# 5️⃣ Copiar el EAR al directorio de despliegue
-echo "Copiando $EAR_FILE a $DEPLOYMENTS_DIR..."
-cp "$EAR_FILE" "$DEPLOYMENTS_DIR/"
-
-echo "=== Assemble completado correctamente ==="
+echo "--- Script de assemble PERSONALIZADO finalizado ---"
