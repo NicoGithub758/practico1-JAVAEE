@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<application xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/application_8.xsd" version="8">
+  <description>This is the EAR POM file</description>
+  <display-name>demo2023-ear</display-name>
+  <module>
+    <ejb>demo2023-ejb.jar</ejb>
+  </module>
+  <module>
+    <web>
+      <web-uri>demo2023-web.war</web-uri>
+      <context-root>/demo2023-web</context-root>
+    </web>
+  </module>
+  <module>
+    <web>
+      <web-uri>demo2023-services.war</web-uri>
+      <context-root>/demo2023-services</context-root>
+    </web>
+  </module>
+  <library-directory>lib</library-directory>
+</application>
