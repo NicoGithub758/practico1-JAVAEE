@@ -1,5 +1,0 @@
-<sub-deployment name="taller-practico1-web-1.0-SNAPSHOT.war">
-    <dependencies>
-        <module name="javax.faces.api" />
-    </dependencies>
-</sub-deployment>
