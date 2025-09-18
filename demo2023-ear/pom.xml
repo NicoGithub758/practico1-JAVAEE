@@ -55,13 +55,14 @@
                 <artifactId>wildfly-jar-maven-plugin</artifactId>
                 <version>8.1.0.Final</version>
                 <configuration>
-                    <!-- == ESTA ES LA PARTE NUEVA Y CRUCIAL == -->
-                    <feature-pack-location>wildfly@${version.jboss.bom}</feature-pack-location>
+                    <!-- == LÍNEA CORREGIDA == -->
+                    <feature-pack-location>org.wildfly:wildfly-ee-galleon-pack:${version.jboss.bom}</feature-pack-location>
                     <layers>
                         <layer>jakartaee-core-profile-server</layer>
                         <layer>ejb</layer>
+                        <!-- Añadimos la capa de JAX-RS ya que tienes un módulo -services -->
+                        <layer>jaxrs</layer>
                     </layers>
-                    <!-- ======================================= -->
                     <final-name>demo2023-bootable.jar</final-name>
                 </configuration>
                 <executions>
