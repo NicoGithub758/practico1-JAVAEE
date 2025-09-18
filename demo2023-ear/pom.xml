@@ -50,14 +50,18 @@
                     <skip>false</skip>
                 </configuration>
             </plugin>
-            <!-- ========================================================== -->
-            <!-- == ESTE ES EL NUEVO PLUGIN QUE HACE TODA LA MAGIA == -->
-            <!-- ========================================================== -->
             <plugin>
                 <groupId>org.wildfly.plugins</groupId>
                 <artifactId>wildfly-jar-maven-plugin</artifactId>
                 <version>8.1.0.Final</version>
                 <configuration>
+                    <!-- == ESTA ES LA PARTE NUEVA Y CRUCIAL == -->
+                    <feature-pack-location>wildfly@${version.jboss.bom}</feature-pack-location>
+                    <layers>
+                        <layer>jakartaee-core-profile-server</layer>
+                        <layer>ejb</layer>
+                    </layers>
+                    <!-- ======================================= -->
                     <final-name>demo2023-bootable.jar</final-name>
                 </configuration>
                 <executions>
@@ -70,5 +74,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>
