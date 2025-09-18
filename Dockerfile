@@ -8,9 +8,9 @@ COPY . .
 RUN mvn clean package -DskipTests
 
 
-### STAGE 2: The Final Image (Usando una versión estable y disponible) ###
-# APUNTE: Usamos la versión 27.0.1.Final que es estable y sabemos que existe en Docker Hub.
-FROM jboss/wildfly:27.0.1.Final
+### STAGE 2: The Final Image (Usando el repositorio y la etiqueta OFICIAL Y VERIFICADA) ###
+# CORRECCIÓN FINAL: El repositorio oficial es 'wildfly' y la versión 27.0.0.Final existe.
+FROM wildfly:27.0.0.Final
 
 # Usamos la ruta y nombre de archivo CORRECTOS que descubriste
 COPY --from=builder /app/ear/target/Laboratorio.ear /opt/jboss/wildfly/standalone/deployments/Laboratorio.ear
