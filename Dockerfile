@@ -10,7 +10,7 @@ RUN mvn clean package -DskipTests
 
 ### STAGE 2: The Final Image (Usando la etiqueta 'latest' para máxima compatibilidad) ###
 # Usamos 'latest' para evitar problemas de autorización o formato de etiquetas.
-FROM wildfly:latest
+FROM wildfly:26.1.3.Final
 
 # Usamos la ruta y nombre de archivo CORRECTOS que descubriste
 COPY --from=builder /app/ear/target/Laboratorio.ear /opt/jboss/wildfly/standalone/deployments/Laboratorio.ear
