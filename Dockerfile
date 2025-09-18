@@ -8,9 +8,9 @@ COPY . .
 RUN mvn clean package -DskipTests
 
 
-### STAGE 2: The Final Image (Usando el repositorio y la etiqueta OFICIAL Y VERIFICADA) ###
-# CORRECCIÓN FINAL: El repositorio oficial es 'wildfly' y la versión 27.0.0.Final existe.
-FROM wildfly:27.0.0.Final
+### STAGE 2: The Final Image (Usando la etiqueta 'latest' para máxima compatibilidad) ###
+# Usamos 'latest' para evitar problemas de autorización o formato de etiquetas.
+FROM wildfly:latest
 
 # Usamos la ruta y nombre de archivo CORRECTOS que descubriste
 COPY --from=builder /app/ear/target/Laboratorio.ear /opt/jboss/wildfly/standalone/deployments/Laboratorio.ear
