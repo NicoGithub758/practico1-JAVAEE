@@ -5,12 +5,12 @@ WORKDIR /app
 
 COPY . .
 
-# Este comando generará el archivo en 'ear/target/Laboratorio.ear'
 RUN mvn clean package -DskipTests
 
 
 ### STAGE 2: The Final Image (Basado en WildFly 37) ###
-FROM jboss/wildfly:37.0.0.Final
+# Usamos la etiqueta correcta de la imagen de Docker
+FROM jboss/wildfly:37.0.Final
 
 # Usamos la ruta y nombre de archivo CORRECTOS que descubriste
 COPY --from=builder /app/ear/target/Laboratorio.ear /opt/jboss/wildfly/standalone/deployments/Laboratorio.ear
