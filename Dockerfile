@@ -4,10 +4,10 @@
 FROM maven:3.9.9-eclipse-temurin-17 AS builder
 WORKDIR /app
 
-# Copiar todos los archivos del proyecto
+# Copiar el código fuente
 COPY . .
 
-# Compilar y empaquetar, generando el EAR
+# Compilar todo, incluyendo el módulo web que genera el WAR
 RUN mvn clean install -DskipTests
 
 # ================================
@@ -15,11 +15,11 @@ RUN mvn clean install -DskipTests
 # ================================
 FROM jboss/wildfly:latest
 
-# Copiar el EAR al directorio de despliegue de WildFly
-COPY --from=builder /app/ear/target/*.ear /opt/jboss/wildfly/standalone/deployments/
+# Copiar el WAR al directorio de despliegue de WildFly
+COPY --from=builder /app/web/target/*.war /opt/jboss/wildfly/standalone/deployments/
 
-# Exponer puerto HTTP
+# Exponer el puerto HTTP de WildFly
 EXPOSE 8080
 
-# Arrancar WildFly en modo standalone
+# Iniciar WildFly
 CMD ["/opt/jboss/wildfly/bin/standalone.sh", "-b", "0.0.0.0"]
