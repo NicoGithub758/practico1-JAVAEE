@@ -22,4 +22,4 @@ COPY --from=builder /app/ear/target/*.ear /opt/jboss/wildfly/standalone/deployme
 EXPOSE 8080
 
 # Iniciar WildFly
-CMD ["sh", "-c", "export JAVA_OPTS='-Xms256m -Xmx384m -XX:MetaspaceSize=96M -XX:MaxMetaspaceSize=192m' && /opt/jboss/wildfly/bin/standalone.sh -b 0.0.0.0"]
+CMD ["/opt/jboss/wildfly/bin/standalone.sh", "-b", "0.0.0.0"]
