@@ -8,7 +8,7 @@ WORKDIR /app
 COPY . .
 
 # Compilar todo, incluyendo el módulo web que genera el WAR
-RUN mvn clean install -DskipTests
+RUN mvn clean install -pl !ear -DskipTests
 
 # ================================
 # Etapa 2: Ejecutar en WildFly
