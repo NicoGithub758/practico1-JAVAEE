@@ -13,14 +13,16 @@ COPY . .
 RUN mvn clean install -DskipTests
 
 # 4. Descargamos e instalamos WildFly DENTRO de la misma imagen
-RUN apt-get update && apt-get install -y unzip && \
+RUN apt-get update && apt-get install -y unzip curl && \
     curl -L -o /tmp/wildfly.zip https://github.com/wildfly/wildfly/releases/download/30.0.1.Final/wildfly-30.0.1.Final.zip && \
     unzip /tmp/wildfly.zip -d /opt/ && \
     mv /opt/wildfly-30.0.1.Final /opt/wildfly && \
     rm /tmp/wildfly.zip
 
-# 5. Copiamos el .ear (que ya compilamos) al directorio de despliegue de WildFly
-COPY ear/target/*.ear /opt/wildfly/standalone/deployments/
+# === CAMBIO CLAVE AQUÍ ===
+# 5. Movemos el .ear (que ya compilamos) al directorio de despliegue de WildFly
+#    No usamos COPY, usamos RUN mv porque el archivo ya está dentro de la imagen.
+RUN mv ear/target/*.ear /opt/wildfly/standalone/deployments/
 
 # 6. Exponemos el puerto de la aplicación
 EXPOSE 8080
