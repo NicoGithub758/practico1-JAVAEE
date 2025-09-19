@@ -13,7 +13,7 @@ RUN mvn clean install -DskipTests
 # ================================
 # Etapa 2: Ejecutar en WildFly
 # ================================
-FROM quay.io/wildfly/wildfly:27.0.1.Final
+FROM jboss/wildfly:latest
 
 # Copiar el EAR al directorio de despliegue de WildFly
 COPY --from=builder /app/ear/target/*.ear /opt/jboss/wildfly/standalone/deployments/
