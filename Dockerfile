@@ -1,26 +1,30 @@
-# ===================================================================
-# Dockerfile Final - Con Script de Arranque Inteligente y sin JPA
-# ===================================================================
+# --- ETAPA 1: Construcción con Maven ---
+# Usamos una imagen oficial de Maven con Java 17 para compilar el proyecto.
+FROM maven:3.9.9-eclipse-temurin-17 AS builder
 
-FROM maven:3.9.9-eclipse-temurin-17
-
+# Establecemos el directorio de trabajo dentro de la imagen.
 WORKDIR /app
+
+# Copiamos todo el código fuente del proyecto.
 COPY . .
+
+# Ejecutamos el comando de Maven para compilar todo y generar el .ear.
 RUN mvn clean install -DskipTests
 
-RUN apt-get update && apt-get install -y unzip curl && \
-    curl -L -o /tmp/wildfly.zip https://github.com/wildfly/wildfly/releases/download/30.0.1.Final/wildfly-30.0.1.Final.zip && \
-    unzip /tmp/wildfly.zip -d /opt/ && \
-    mv /opt/wildfly-30.0.1.Final /opt/wildfly && \
-    rm /tmp/wildfly.zip
 
-RUN mv ear/target/*.ear /opt/wildfly/standalone/deployments/
-COPY start.sh /opt/
-RUN chmod +x /opt/start.sh
+# --- ETAPA 2: Ejecución con WildFly ---
+# Usamos la imagen oficial de WildFly 30 que corre sobre Java 17.
+FROM quay.io/wildfly/wildfly:30.0.1.Final-jdk17
 
+# Copiamos el archivo .ear que generamos en la etapa anterior (builder)
+# al directorio de despliegues de WildFly.
+COPY --from=builder /app/ear/target/*.ear /opt/jboss/wildfly/standalone/deployments/
+
+# Exponemos el puerto 8080 para que la aplicación sea accesible.
 EXPOSE 8080
 
-# Ahora que la app es más ligera, podemos ser un poco más generosos con la memoria.
+# Establecemos las opciones de memoria de Java para un consumo reducido.
 ENV JAVA_OPTS="-Xms128m -Xmx256m -XX:MetaspaceSize=64M -XX:MaxMetaspaceSize=128m"
 
-CMD ["/opt/start.sh"]
+# El comando estándar para iniciar WildFly.
+CMD ["/opt/jboss/wildfly/bin/standalone.sh", "-b", "0.0.0.0"]
