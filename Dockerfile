@@ -3,11 +3,7 @@
 # ================================
 FROM maven:3.9.9-eclipse-temurin-17 AS builder
 WORKDIR /app
-
-# Copiar el código fuente
 COPY . .
-
-# Compilar el proyecto completo para generar el .ear final
 RUN mvn clean install -DskipTests
 
 # ================================
@@ -15,11 +11,18 @@ RUN mvn clean install -DskipTests
 # ================================
 FROM quay.io/wildfly/wildfly:30.0.1.Final-jdk17
 
-# Copiar el ARCHIVO .EAR (no el .war) al directorio de despliegue
+# Copia el .ear
 COPY --from=builder /app/ear/target/*.ear /opt/jboss/wildfly/standalone/deployments/
 
-# Exponer el puerto HTTP de WildFly
-EXPOSE 8080
+# === CAMBIOS PARA EL SCRIPT DE ARRANQUE ===
+# 1. Copia el script al contenedor
+COPY start.sh /opt/jboss/
 
-# Iniciar WildFly
-CMD ["/opt/jboss/wildfly/bin/standalone.sh", "-b", "0.0.0.0"]
+# 2. Dale permisos de ejecución
+RUN chmod +x /opt/jboss/start.sh
+
+# 3. Define los JAVA_OPTS de forma agresiva para ahorrar memoria
+ENV JAVA_OPTS="-Xms128m -Xmx256m -XX:MetaspaceSize=64M -XX:MaxMetaspaceSize=128m"
+
+# 4. Usa el script como punto de entrada (ENTRYPOINT)
+ENTRYPOINT ["/opt/jboss/start.sh"]
