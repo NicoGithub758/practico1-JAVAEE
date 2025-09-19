@@ -23,4 +23,4 @@ COPY --from=builder /app/web/target/*.war /opt/jboss/wildfly/standalone/deployme
 EXPOSE 8080
 
 # Iniciar WildFly (el CMD que tenías es correcto)
-CMD ["/opt/jboss/wildfly/bin/standalone.sh", "-b", "0.0.0.0"]```
+CMD ["/opt/jboss/wildfly/bin/standalone.sh", "-b", "0.0.0.0"]
