@@ -1,3 +1,7 @@
+# ===================================================================
+# Dockerfile Final Definitivo - Estrategia index.html
+# ===================================================================
+
 # --- ETAPA 1: Construcción con Maven ---
 # Usamos una imagen oficial de Maven con Java 17 para compilar el proyecto.
 FROM maven:3.9.9-eclipse-temurin-17 AS builder
@@ -24,7 +28,7 @@ COPY --from=builder /app/ear/target/*.ear /opt/jboss/wildfly/standalone/deployme
 EXPOSE 8080
 
 # Establecemos las opciones de memoria de Java para un consumo reducido.
-ENV JAVA_OPTS="-Xms64m -Xmx128m -XX:MetaspaceSize=64M -XX:MaxMetaspaceSize=128m"
+ENV JAVA_OPTS="-Xms128m -Xmx256m -XX:MetaspaceSize=64M -XX:MaxMetaspaceSize=128m"
 
 # El comando estándar para iniciar WildFly.
 CMD ["/opt/jboss/wildfly/bin/standalone.sh", "-b", "0.0.0.0"]
