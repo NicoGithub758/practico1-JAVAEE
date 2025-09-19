@@ -7,58 +7,50 @@
         <artifactId>Laboratorio</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
+
     <artifactId>Laboratorio-ear</artifactId>
     <packaging>ear</packaging>
     <name>Laboratorio - ear</name>
     <description>This is the EAR POM file</description>
 
     <dependencies>
+        <!-- Dependencia del módulo EJB -->
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>Laboratorio-ejb</artifactId>
+            <version>${project.version}</version>
             <type>ejb</type>
         </dependency>
+        <!-- Dependencia del módulo Web -->
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>Laboratorio-web</artifactId>
+            <version>${project.version}</version>
             <type>war</type>
         </dependency>
     </dependencies>
 
     <build>
+        <!-- El nombre final será 'Laboratorio.ear' -->
         <finalName>${project.parent.artifactId}</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-ear-plugin</artifactId>
-                <version>${version.ear.plugin}</version>
+                <version>3.3.0</version> <!-- Usar una versión específica es buena práctica -->
                 <configuration>
+                    <!-- Especifica la versión de Jakarta EE, 10 es correcto para WildFly 30 -->
                     <version>10</version>
                     <defaultLibBundleDir>lib</defaultLibBundleDir>
-                    <outputFileNameMapping>@{artifactId}@@{dashClassifier?}@.@{extension}@</outputFileNameMapping>
+                    <modules>
+                        <webModule>
+                            <groupId>${project.groupId}</groupId>
+                            <artifactId>Laboratorio-web</artifactId>
+                            <!-- Opcional: define el context root de tu aplicación web -->
+                            <contextRoot>/Laboratorio</contextRoot>
+                        </webModule>
+                    </modules>
                 </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.wildfly.plugins</groupId>
-                <artifactId>wildfly-maven-plugin</artifactId>
-                <configuration>
-                    <skip>false</skip>
-                </configuration>
-            </plugin>
-            <!-- AHORA SOLO LO EJECUTAMOS Y CONFIGURAMOS -->
-            <plugin>
-                <groupId>org.wildfly.plugins</groupId>
-                <artifactId>wildfly-jar-maven-plugin</artifactId>
-                <configuration>
-                    <final-name>laboratorio-bootable.jar</final-name>
-                </configuration>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>package</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
         </plugins>
     </build>
