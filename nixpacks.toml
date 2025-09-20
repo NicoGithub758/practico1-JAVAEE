@@ -1,9 +1,0 @@
-# nixpacks.toml
-
-[phases.setup]
-# Eliminamos "..." para NO heredar la configuración por defecto (que incluye jdk17).
-# Esta es ahora la lista COMPLETA y ÚNICA de paquetes a instalar.
-nixPkgs = ["jdk11", "maven"]
-
-[start]
-cmd = "java -Djboss.http.port=$PORT -jar ear/target/demo2023-bootable.jar"
