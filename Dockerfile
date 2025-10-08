@@ -28,7 +28,7 @@ COPY --from=builder /app/ear/target/*.ear /opt/jboss/wildfly/standalone/deployme
 EXPOSE 8080
 
 # Establecemos las opciones de memoria de Java para un consumo reducido.
-ENV JAVA_OPTS="-Xms128m -Xmx256m -XX:MetaspaceSize=64M -XX:MaxMetaspaceSize=128m"
+ENV JAVA_OPTS="-Xms128m -Xmx256m -XX:MetaspaceSize=96M -XX:MaxMetaspaceSize=256m"
 
 # El comando estándar para iniciar WildFly.
 CMD ["/opt/jboss/wildfly/bin/standalone.sh", "-c", "standalone-full.xml", "-b", "0.0.0.0"]
