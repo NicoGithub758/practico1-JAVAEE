@@ -32,4 +32,7 @@ COPY --from=build /app/target/*.jar app.jar
 EXPOSE 8081
 
 # Comando para arrancar la aplicación cuando se inicie el contenedor
-ENTRYPOINT ["java", "-XX:MaxRAMPercentage=75.0", "-jar", "app.jar"]
+ENV JAVA_OPTS="-Xms128m -Xmx256m -XX:MetaspaceSize=64M -XX:MaxMetaspaceSize=128m"
+
+# Comando para arrancar la aplicación, ahora la JVM usará las opciones de JAVA_OPTS
+ENTRYPOINT ["java", "-jar", "app.jar"]
