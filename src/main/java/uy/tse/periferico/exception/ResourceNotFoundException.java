@@ -1,4 +1,4 @@
-package uy.tse.prestador_salud_service.exception;
+package uy.tse.periferico.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

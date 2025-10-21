@@ -1,4 +1,4 @@
-package uy.tse.prestador_salud_service;
+package uy.tse.periferico;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

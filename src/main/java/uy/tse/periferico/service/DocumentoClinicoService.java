@@ -1,12 +1,14 @@
-package uy.tse.prestador_salud_service.service;
+package uy.tse.periferico.service;
 
 import lombok.RequiredArgsConstructor;
+import uy.tse.periferico.dto.DocumentoClinicoDTO;
+import uy.tse.periferico.exception.ResourceNotFoundException;
+import uy.tse.periferico.model.DocumentoClinico;
+import uy.tse.periferico.repository.DocumentoClinicoRepository;
+
 import org.springframework.stereotype.Service;
-import uy.tse.prestador_salud_service.dto.DocumentoClinicoDTO;
-import uy.tse.prestador_salud_service.exception.ResourceNotFoundException;
-import uy.tse.prestador_salud_service.model.DocumentoClinico;
+
 import jakarta.transaction.Transactional;
-import uy.tse.prestador_salud_service.repository.DocumentoClinicoRepository;
 
 
 
@@ -39,7 +41,7 @@ public class DocumentoClinicoService {
 
         // Mapeo de Profesional
         DocumentoClinicoDTO.ProfesionalInfo profesionalInfo = new DocumentoClinicoDTO.ProfesionalInfo();
-        profesionalInfo.setProfesionalId(doc.getProfesional().getProfesionalId());
+        profesionalInfo.setProfesionalId(doc.getProfesional().getId());
         profesionalInfo.setNombreCompleto(doc.getProfesional().getNombre() + " " + doc.getProfesional().getApellido());
         profesionalInfo.setEspecializacion(doc.getProfesional().getEspecializacion());
         dto.setProfesional(profesionalInfo);

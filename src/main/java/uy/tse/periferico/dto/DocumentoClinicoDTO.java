@@ -1,4 +1,4 @@
-package uy.tse.prestador_salud_service.dto;
+package uy.tse.periferico.dto;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

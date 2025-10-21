@@ -1,8 +1,9 @@
-package uy.tse.prestador_salud_service.repository;
+package uy.tse.periferico.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import uy.tse.prestador_salud_service.model.DocumentoClinico;
+
+import uy.tse.periferico.model.DocumentoClinico;
 
 
 @Repository

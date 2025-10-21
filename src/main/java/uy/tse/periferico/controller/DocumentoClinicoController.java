@@ -1,13 +1,14 @@
-package uy.tse.prestador_salud_service.controller;
+package uy.tse.periferico.controller;
 
 import lombok.RequiredArgsConstructor;
+import uy.tse.periferico.dto.DocumentoClinicoDTO;
+import uy.tse.periferico.service.DocumentoClinicoService;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import uy.tse.prestador_salud_service.dto.DocumentoClinicoDTO;
-import uy.tse.prestador_salud_service.service.DocumentoClinicoService;
 
 
 

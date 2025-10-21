@@ -1,4 +1,4 @@
-package uy.tse.prestador_salud_service.model;
+package uy.tse.periferico.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
