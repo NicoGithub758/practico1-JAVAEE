@@ -17,7 +17,7 @@ public class AutenticacionService {
 
     public String login(LoginRequest loginRequest) {
         // MUY IMPORTANTE: Antes de llamar al repositorio, establecemos el contexto
-        TenantContext.setCurrentTenant(loginRequest.getTenantId());
+        //TenantContext.setCurrentTenant(loginRequest.getTenantId());
 
         Profesional profesional = profesionalRepository.findByUsername(loginRequest.getUsername())
                 .orElseThrow(() -> new RuntimeException("Usuario o tenant incorrecto"));

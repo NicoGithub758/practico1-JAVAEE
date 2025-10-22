@@ -9,12 +9,23 @@ import java.sql.SQLException;
 @Component
 public class SchemaMultiTenantConnectionProvider implements MultiTenantConnectionProvider<String> {
     private final DataSource dataSource;
-    public SchemaMultiTenantConnectionProvider(DataSource dataSource) { this.dataSource = dataSource; }
+
+    public SchemaMultiTenantConnectionProvider(DataSource dataSource) {
+        this.dataSource = dataSource;
+    }
 
     @Override
     public Connection getConnection(String tenantIdentifier) throws SQLException {
         final Connection connection = getAnyConnection();
-        connection.setSchema(tenantIdentifier);
+        try {
+            // --- INICIO DE LÍNEA DE DEBUG ---
+            System.out.println("DEBUG: SchemaProvider -> Intentando cambiar al schema: " + tenantIdentifier);
+            // --- FIN DE LÍNEA DE DEBUG ---
+            connection.setSchema(tenantIdentifier);
+        } catch (SQLException e) {
+            System.err.println("ERROR: No se pudo cambiar al schema '" + tenantIdentifier + "'");
+            throw new SQLException("No se pudo establecer el schema para el tenant " + tenantIdentifier, e);
+        }
         return connection;
     }
 
@@ -29,14 +40,28 @@ public class SchemaMultiTenantConnectionProvider implements MultiTenantConnectio
     }
 
     @Override
-    public Connection getAnyConnection() throws SQLException { return dataSource.getConnection(); }
+    public Connection getAnyConnection() throws SQLException {
+        return dataSource.getConnection();
+    }
+
     @Override
-    public void releaseAnyConnection(Connection connection) throws SQLException { connection.close(); }
+    public void releaseAnyConnection(Connection connection) throws SQLException {
+        connection.close();
+    }
+
     @Override
-    public boolean supportsAggressiveRelease() { return false; }
+    public boolean supportsAggressiveRelease() {
+        return false;
+    }
+
     @Override
-    public boolean isUnwrappableAs(Class<?> unwrapType) { return false; }
+    public boolean isUnwrappableAs(Class<?> unwrapType) {
+        return false;
+    }
+
     @Override
-    public <T> T unwrap(Class<T> unwrapType) { return null; }
+    public <T> T unwrap(Class<T> unwrapType) {
+        return null;
+    }
 }
 

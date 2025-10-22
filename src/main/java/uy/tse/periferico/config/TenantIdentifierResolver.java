@@ -5,12 +5,21 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class TenantIdentifierResolver implements CurrentTenantIdentifierResolver<String> {
+    
     @Override
     public String resolveCurrentTenantIdentifier() {
         String tenantId = TenantContext.getCurrentTenant();
+        
+        // --- INICIO DE LÍNEA DE DEBUG ---
+        System.out.println("DEBUG: TenantIdentifierResolver -> Resolviendo tenant: " + tenantId);
+        // --- FIN DE LÍNEA DE DEBUG ---
+
         // Si no hay tenant en el contexto, se usa el schema por defecto (usualmente 'public')
         return tenantId != null ? tenantId : "public";
     }
+
     @Override
-    public boolean validateExistingCurrentSessions() { return true; }
+    public boolean validateExistingCurrentSessions() {
+        return true;
+    }
 }
