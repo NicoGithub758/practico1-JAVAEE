@@ -5,8 +5,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "profesionales", uniqueConstraints = {    
-    @UniqueConstraint(columnNames = {"username"})
+@Table(name = "profesional", uniqueConstraints = { 
+    @UniqueConstraint(columnNames = {"nombre_usuario"}) 
 })
 @Data
 @NoArgsConstructor
@@ -14,12 +14,12 @@ public class Profesional {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "profesional_id") 
     private Long id;
 
-    @Column(nullable = false, unique = true)
-    private String username;
-
-    @Column(nullable = false)
+    @Column(name = "nombre_usuario", nullable = false, unique = true)
+    private String username; 
+    @Column(name = "password_hash", nullable = false)
     private String passwordHash;
 
     @Column(nullable = false)
@@ -29,4 +29,6 @@ public class Profesional {
     private String apellido;
 
     private String especializacion;
+    private String email;
+    private String estado;
 }
