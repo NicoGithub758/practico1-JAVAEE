@@ -1,21 +1,23 @@
-import React, { useState, useEffect } from 'react';
+// RUTA: src/pages/DashboardPage.js
+
+import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import apiClient from '../services/api';
+import { Link } from 'react-router-dom'; // <-- PASO 1: Importar Link
 
 const DashboardPage = () => {
     const { user, logout } = useAuth();
     const [documento, setDocumento] = useState(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
-    const [docId, setDocId] = useState('1'); // ID del documento a buscar
+    const [docId, setDocId] = useState('1');
 
     const fetchDocumento = async () => {
         if (!user) return;
         setLoading(true);
         setError('');
         try {
-            // El tenantId viene del token, que fue extraído y guardado en el objeto 'user'
-            const tenantId = user.tenant_id; 
+            const tenantId = user.tenant_id;
             const response = await apiClient.get(`/${tenantId}/api/documentos/${docId}`);
             setDocumento(response.data);
         } catch (err) {
@@ -27,29 +29,47 @@ const DashboardPage = () => {
     };
 
     return (
-        <div style={{ padding: '20px', fontFamily: 'sans-serif' }}>
-            <h1>Dashboard del Tenant: {user?.tenant_id}</h1>
-            <p>Bienvenido, <strong>{user?.sub}</strong>.</p>
-            <button onClick={logout} style={{marginBottom: '20px'}}>Cerrar Sesión</button>
-            <hr />
-            
-            <h3>Consultar Documento Clínico</h3>
-            <div>
-                <label>ID del Documento: </label>
-                <input type="text" value={docId} onChange={(e) => setDocId(e.target.value)} />
-                <button onClick={fetchDocumento} disabled={loading}>
-                    {loading ? 'Buscando...' : 'Buscar'}
-                </button>
-            </div>
-            
-            {error && <p style={{color: 'red'}}>{error}</p>}
-            
-            {documento && (
-                <div style={{marginTop: '20px', border: '1px solid green', padding: '10px'}}>
-                    <h4>Resultado:</h4>
-                    <pre>{JSON.stringify(documento, null, 2)}</pre>
+        <div style={{ padding: '20px', fontFamily: 'sans-serif', maxWidth: '900px', margin: 'auto' }}>
+            {/* --- PASO 2: Estructura de cabecera mejorada --- */}
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #eee', paddingBottom: '10px' }}>
+                <h1>Dashboard</h1>
+                <div>
+                    {/* --- PASO 3: Enlace a la página de perfil --- */}
+                    <Link to={`/${user?.tenant_id}/perfil`} style={{ marginRight: '20px', textDecoration: 'none', color: '#007bff', fontWeight: 'bold' }}>
+                        Mi Perfil
+                    </Link>
+                    <button onClick={logout} style={{padding: '8px 12px', border: 'none', backgroundColor: '#dc3545', color: 'white', borderRadius: '5px', cursor: 'pointer'}}>
+                        Cerrar Sesión
+                    </button>
                 </div>
-            )}
+            </div>
+
+            <p style={{ marginTop: '20px' }}>
+                Bienvenido, <strong>{user?.sub}</strong> (Tenant: {user?.tenant_id}).
+            </p>
+
+            <div style={{ marginTop: '30px', padding: '20px', backgroundColor: '#f8f9fa', borderRadius: '8px' }}>
+                <h3>Consultar Documento Clínico</h3>
+                <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                    <label>ID del Documento: </label>
+                    <input type="text" value={docId} onChange={(e) => setDocId(e.target.value)} style={{ padding: '8px', borderRadius: '5px', border: '1px solid #ccc' }} />
+                    <button onClick={fetchDocumento} disabled={loading} style={{ padding: '8px 12px', border: 'none', backgroundColor: '#007bff', color: 'white', borderRadius: '5px', cursor: 'pointer' }}>
+                        {loading ? 'Buscando...' : 'Buscar'}
+                    </button>
+                </div>
+
+                {error && <p style={{color: 'red', marginTop: '10px'}}>{error}</p>}
+
+                {documento && (
+                    <div style={{marginTop: '20px', border: '1px solid #ccc', padding: '15px', borderRadius: '5px', backgroundColor: 'white'}}>
+                        <h4>Resultado Encontrado:</h4>
+                        {/* Usamos <pre> para mantener el formato del JSON */}
+                        <pre style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-all' }}>
+                            {JSON.stringify(documento, null, 2)}
+                        </pre>
+                    </div>
+                )}
+            </div>
         </div>
     );
 };
