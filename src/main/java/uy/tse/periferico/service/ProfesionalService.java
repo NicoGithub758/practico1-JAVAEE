@@ -12,6 +12,8 @@ import uy.tse.periferico.exception.ResourceAlreadyExistsException;
 import uy.tse.periferico.exception.ResourceNotFoundException;
 import uy.tse.periferico.model.Profesional;
 import uy.tse.periferico.repository.ProfesionalRepository;
+import uy.tse.periferico.dto.ProfesionalProfileUpdateDTO; // Asegúrate de importar el nuevo DTO
+
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -26,7 +28,7 @@ public class ProfesionalService {
     // --- ALTA (CREATE) ---
     @Transactional
     public ProfesionalDTO createProfesional(ProfesionalCreateDTO createDTO) {
-        // El TenantContext ya fue establecido por el filtro JWT
+        // Verifica si el username ya existe para evitar duplicados
         profesionalRepository.findByUsername(createDTO.getUsername()).ifPresent(p -> {
             throw new ResourceAlreadyExistsException("El username '" + createDTO.getUsername() + "' ya existe.");
         });
@@ -36,9 +38,12 @@ public class ProfesionalService {
         nuevoProfesional.setNombre(createDTO.getNombre());
         nuevoProfesional.setApellido(createDTO.getApellido());
         nuevoProfesional.setEspecializacion(createDTO.getEspecializacion());
+        nuevoProfesional.setEmail(createDTO.getEmail()); // Se asigna el email desde el DTO
 
-        // Hashear la contraseña antes de guardarla
+        // Hashear la contraseña antes de guardarla en la base de datos
         nuevoProfesional.setPasswordHash(passwordEncoder.encode(createDTO.getPassword()));
+
+        // El estado se establece por defecto a "ACTIVO" en el modelo Profesional.java
 
         Profesional profesionalGuardado = profesionalRepository.save(nuevoProfesional);
         return mapToDTO(profesionalGuardado);
@@ -50,11 +55,12 @@ public class ProfesionalService {
         Profesional profesional = profesionalRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Profesional no encontrado con id: " + id));
 
+        // Actualiza los campos proporcionados en el DTO
         profesional.setNombre(updateDTO.getNombre());
         profesional.setApellido(updateDTO.getApellido());
         profesional.setEspecializacion(updateDTO.getEspecializacion());
 
-        // Si se provee una nueva contraseña, se actualiza
+        // Si se provee una nueva contraseña en el DTO, se actualiza el hash
         if (updateDTO.getPassword() != null && !updateDTO.getPassword().isEmpty()) {
             profesional.setPasswordHash(passwordEncoder.encode(updateDTO.getPassword()));
         }
@@ -63,12 +69,16 @@ public class ProfesionalService {
         return mapToDTO(profesionalActualizado);
     }
 
-    // --- BAJA (DELETE) ---
+    // --- BAJA (DELETE FÍSICO / HARD DELETE) ---
     @Transactional
     public void deleteProfesional(Long id) {
+        // 1. Primero, verificamos si el profesional existe para lanzar una excepción clara si no.
         if (!profesionalRepository.existsById(id)) {
             throw new ResourceNotFoundException("Profesional no encontrado con id: " + id);
         }
+        // 2. Si existe, lo borra permanentemente de la base de datos.
+        // ADVERTENCIA: Esto puede fallar si el profesional tiene registros asociados (ej. Documentos Clínicos)
+        // y no hay una estrategia de borrado en cascada configurada.
         profesionalRepository.deleteById(id);
     }
 
@@ -89,7 +99,9 @@ public class ProfesionalService {
     }
 
 
-    // --- Mapeador privado ---
+    // --- Mapeador privado de Entidad a DTO ---
+    // Convierte un objeto de la base de datos (Profesional) a un objeto de transferencia de datos (ProfesionalDTO)
+    // que se enviará al frontend.
     private ProfesionalDTO mapToDTO(Profesional profesional) {
         ProfesionalDTO dto = new ProfesionalDTO();
         dto.setId(profesional.getId());
@@ -97,6 +109,37 @@ public class ProfesionalService {
         dto.setNombre(profesional.getNombre());
         dto.setApellido(profesional.getApellido());
         dto.setEspecializacion(profesional.getEspecializacion());
+        dto.setEmail(profesional.getEmail());
+        dto.setEstado(profesional.getEstado());
+        dto.setRol("PROFESIONAL"); // El rol es fijo para esta entidad en este contexto
         return dto;
+    }
+
+    @Transactional(readOnly = true)
+    public ProfesionalDTO findProfesionalByEmail(String email) {
+        Profesional profesional = profesionalRepository.findByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("No se encontró un profesional con el email: " + email));
+        return mapToDTO(profesional);
+    }
+
+    @Transactional
+    public ProfesionalDTO updateOwnProfile(String username, ProfesionalProfileUpdateDTO updateDTO) {
+        // Busca al profesional por el username obtenido del token JWT
+        Profesional profesional = profesionalRepository.findByUsername(username)
+                .orElseThrow(() -> new ResourceNotFoundException("Profesional no encontrado: " + username));
+
+        // Actualiza los campos permitidos
+        profesional.setNombre(updateDTO.getNombre());
+        profesional.setApellido(updateDTO.getApellido());
+        profesional.setEspecializacion(updateDTO.getEspecializacion());
+        profesional.setEmail(updateDTO.getEmail());
+
+        // Si se provee una nueva contraseña, se actualiza
+        if (updateDTO.getPassword() != null && !updateDTO.getPassword().isEmpty()) {
+            profesional.setPasswordHash(passwordEncoder.encode(updateDTO.getPassword()));
+        }
+
+        Profesional profesionalActualizado = profesionalRepository.save(profesional);
+        return mapToDTO(profesionalActualizado);
     }
 }

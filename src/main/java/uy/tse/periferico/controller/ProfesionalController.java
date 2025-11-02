@@ -52,4 +52,9 @@ public class ProfesionalController {
     public ResponseEntity<List<ProfesionalDTO>> getAllProfesionales() {
         return ResponseEntity.ok(profesionalService.findAllProfesionales());
     }
+
+    @GetMapping("/email/{email}")
+    public ResponseEntity<ProfesionalDTO> getProfesionalByEmail(@PathVariable String email) {
+        return ResponseEntity.ok(profesionalService.findProfesionalByEmail(email));
+    }
 }

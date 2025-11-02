@@ -12,4 +12,5 @@ public class ProfesionalCreateDTO {
     private String especializacion;
     private String email;
     private String estado;
+
 }
