@@ -142,4 +142,14 @@ public class ProfesionalService {
         Profesional profesionalActualizado = profesionalRepository.save(profesional);
         return mapToDTO(profesionalActualizado);
     }
+
+    @Transactional(readOnly = true)
+    public ProfesionalDTO getProfileByUsername(String username) {
+        // 1. Busca la entidad Profesional en la base de datos por su username.
+        Profesional profesional = profesionalRepository.findByUsername(username)
+                .orElseThrow(() -> new ResourceNotFoundException("Perfil de profesional no encontrado para el usuario: " + username));
+
+        // 2. Reutiliza tu método mapToDTO para convertir la entidad al DTO que necesita el frontend.
+        return mapToDTO(profesional);
+    }
 }
