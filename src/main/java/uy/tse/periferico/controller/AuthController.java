@@ -10,12 +10,19 @@ import uy.tse.periferico.dto.LoginRequest;
 import uy.tse.periferico.dto.LoginResponse;
 import uy.tse.periferico.service.AutenticacionService;
 import org.springframework.web.bind.annotation.PathVariable;
+import uy.tse.periferico.service.ProfesionalService;
+import uy.tse.periferico.dto.ProfesionalDTO;
+import org.springframework.web.bind.annotation.PutMapping;
+import uy.tse.periferico.dto.ProfesionalProfileUpdateDTO;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+
 
 @RestController
 @RequestMapping("/{tenantId}/api/auth")
 @RequiredArgsConstructor
 public class AuthController {
     private final AutenticacionService autenticacionService;
+    private final ProfesionalService profesionalService;
 
     // Renombrado para mayor claridad (de /login a /login/profesional)
     @PostMapping("/login/profesional")
@@ -31,6 +38,12 @@ public class AuthController {
         String token = autenticacionService.loginAdmin(loginRequest, tenantId);
         // Devuelve el token en la respuesta
         return ResponseEntity.ok(new LoginResponse(token));
+    }
+
+    @PutMapping("/profesionales/perfil")
+    public ResponseEntity<ProfesionalDTO> updateOwnProfile(@AuthenticationPrincipal String username, @RequestBody ProfesionalProfileUpdateDTO updateDTO) {
+        ProfesionalDTO profesionalActualizado = profesionalService.updateOwnProfile(username, updateDTO);
+        return ResponseEntity.ok(profesionalActualizado);
     }
 }
 
