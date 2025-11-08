@@ -55,5 +55,6 @@ export const deleteProfesional = (tenantId, id) => apiClient.delete(`/${tenantId
 // Busca un profesional por su email
 export const getProfesionalByEmail = (tenantId, email) => apiClient.get(`/${tenantId}/api/admin/profesionales/email/${email}`);
 
+export const importarPaciente = (tenantId, cedula) => {return apiClient.post(`/${tenantId}/api/auth/admin/importar-paciente/${cedula}`);};
 
 export default apiClient;
