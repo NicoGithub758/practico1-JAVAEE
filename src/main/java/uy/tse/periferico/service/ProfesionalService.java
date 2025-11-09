@@ -14,8 +14,15 @@ import uy.tse.periferico.model.Profesional;
 import uy.tse.periferico.repository.ProfesionalRepository;
 import uy.tse.periferico.dto.ProfesionalProfileUpdateDTO; // Asegúrate de importar el nuevo DTO
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -152,4 +159,5 @@ public class ProfesionalService {
         // 2. Reutiliza tu método mapToDTO para convertir la entidad al DTO que necesita el frontend.
         return mapToDTO(profesional);
     }
+
 }
