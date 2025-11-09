@@ -46,6 +46,7 @@ public class SecurityConfig {
                         .requestMatchers("/{tenantId}/api/auth/perfil").hasRole("PROFESIONAL")
 
                         // Ruta para que el profesional vea documentos
+                        .requestMatchers("/{tenantId}/api/pacientes/**").hasRole("PROFESIONAL")
                         .requestMatchers("/{tenantId}/api/documentos/**").hasAnyRole("PROFESIONAL", "SYSTEM")
 
                         // --- PASO 4: La regla más general, AL FINAL ---
