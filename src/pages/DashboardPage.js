@@ -48,6 +48,15 @@ const DashboardPage = () => {
                 Bienvenido, <strong>{user?.sub}</strong> (Tenant: {user?.tenant_id}).
             </p>
 
+             <div style={{ marginTop: '30px', padding: '20px', backgroundColor: '#e9f5ff', borderRadius: '8px', textAlign: 'center' }}>
+                <h2>Acciones Rápidas</h2>
+                <Link to={`/${user?.tenant_id}/crear-historia`}>
+                    <button style={{ padding: '12px 20px', fontSize: '1.1em', border: 'none', backgroundColor: '#28a745', color: 'white', borderRadius: '5px', cursor: 'pointer' }}>
+                        ➕ Crear Nueva Historia Clínica
+                    </button>
+                </Link>
+            </div>
+
             <div style={{ marginTop: '30px', padding: '20px', backgroundColor: '#f8f9fa', borderRadius: '8px' }}>
                 <h3>Consultar Documento Clínico</h3>
                 <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>

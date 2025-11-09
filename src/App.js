@@ -15,6 +15,7 @@ import AdminSettingsPage from './pages/AdminSettingsPage';
 
 // --- PASO 1: Importar la nueva página de perfil ---
 import ProfilePage from './pages/ProfilePage';
+import CrearHistoriaClinicaPage from './pages/CrearHistoriaClinicaPage';
 
 import TenantLayout from './components/TenantLayout';
 import ProtectedRoute from './components/ProtectedRoute';
@@ -37,6 +38,7 @@ function App() {
 
                             {/* --- PASO 2: Añadir la nueva ruta para el perfil --- */}
                             <Route path="perfil" element={<ProfilePage />} />
+                            <Route path="crear-historia" element={<CrearHistoriaClinicaPage />} />
                         </Route>
 
                         {/* Rutas Protegidas para Administradores */}

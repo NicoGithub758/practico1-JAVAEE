@@ -57,4 +57,20 @@ export const getProfesionalByEmail = (tenantId, email) => apiClient.get(`/${tena
 
 export const importarPaciente = (tenantId, cedula) => {return apiClient.post(`/${tenantId}/api/auth/admin/importar-paciente/${cedula}`);};
 
+// ===========================================
+// === Funciones de Pacientes y Documentos ===
+// ===========================================
+
+// Busca pacientes por su número de documento
+export const searchPacientes = (tenantId, nroDocumento) => {
+    return apiClient.get(`/${tenantId}/api/pacientes/search`, {
+        params: { nroDocumento }
+    });
+};
+
+// Crea un nuevo documento clínico
+export const createDocumentoClinico = (tenantId, data) => {
+    return apiClient.post(`/${tenantId}/api/documentos`, data);
+};
+
 export default apiClient;
