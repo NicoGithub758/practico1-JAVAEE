@@ -3,14 +3,15 @@
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import apiClient from '../services/api';
-import { Link } from 'react-router-dom'; // <-- PASO 1: Importar Link
+import { Link } from 'react-router-dom';
+import SolicitarAcceso from '../components/SolicitarAcceso'; // AÑADIR IMPORT
 
 const DashboardPage = () => {
     const { user, logout } = useAuth();
     const [documento, setDocumento] = useState(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
-    const [docId, setDocId] = useState('1');
+    const [docId, setDocId] = useState('DOC-TENANT_A-1234abcd'); // Actualizado para que sea un ejemplo válido
 
     const fetchDocumento = async () => {
         if (!user) return;
@@ -30,11 +31,9 @@ const DashboardPage = () => {
 
     return (
         <div style={{ padding: '20px', fontFamily: 'sans-serif', maxWidth: '900px', margin: 'auto' }}>
-            {/* --- PASO 2: Estructura de cabecera mejorada --- */}
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #eee', paddingBottom: '10px' }}>
                 <h1>Dashboard</h1>
                 <div>
-                    {/* --- PASO 3: Enlace a la página de perfil --- */}
                     <Link to={`/${user?.tenant_id}/perfil`} style={{ marginRight: '20px', textDecoration: 'none', color: '#007bff', fontWeight: 'bold' }}>
                         Mi Perfil
                     </Link>
@@ -48,7 +47,7 @@ const DashboardPage = () => {
                 Bienvenido, <strong>{user?.sub}</strong> (Tenant: {user?.tenant_id}).
             </p>
 
-             <div style={{ marginTop: '30px', padding: '20px', backgroundColor: '#e9f5ff', borderRadius: '8px', textAlign: 'center' }}>
+            <div style={{ marginTop: '30px', padding: '20px', backgroundColor: '#e9f5ff', borderRadius: '8px', textAlign: 'center' }}>
                 <h2>Acciones Rápidas</h2>
                 <Link to={`/${user?.tenant_id}/crear-historia`}>
                     <button style={{ padding: '12px 20px', fontSize: '1.1em', border: 'none', backgroundColor: '#28a745', color: 'white', borderRadius: '5px', cursor: 'pointer' }}>
@@ -57,8 +56,11 @@ const DashboardPage = () => {
                 </Link>
             </div>
 
+            {/* --- INTEGRACIÓN DEL NUEVO COMPONENTE --- */}
+            <SolicitarAcceso />
+
             <div style={{ marginTop: '30px', padding: '20px', backgroundColor: '#f8f9fa', borderRadius: '8px' }}>
-                <h3>Consultar Documento Clínico</h3>
+                <h3>Consultar Documento Clínico (Local)</h3>
                 <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
                     <label>ID del Documento: </label>
                     <input type="text" value={docId} onChange={(e) => setDocId(e.target.value)} style={{ padding: '8px', borderRadius: '5px', border: '1px solid #ccc' }} />
@@ -72,7 +74,6 @@ const DashboardPage = () => {
                 {documento && (
                     <div style={{marginTop: '20px', border: '1px solid #ccc', padding: '15px', borderRadius: '5px', backgroundColor: 'white'}}>
                         <h4>Resultado Encontrado:</h4>
-                        {/* Usamos <pre> para mantener el formato del JSON */}
                         <pre style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-all' }}>
                             {JSON.stringify(documento, null, 2)}
                         </pre>

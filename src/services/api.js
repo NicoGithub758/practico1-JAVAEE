@@ -73,4 +73,8 @@ export const createDocumentoClinico = (tenantId, data) => {
     return apiClient.post(`/${tenantId}/api/documentos`, data);
 };
 
+// Solicita acceso para ver la historia de un paciente
+export const solicitarAccesoPaciente = (tenantId, cedulaPaciente) => {
+    return apiClient.post(`/${tenantId}/api/pacientes/solicitar-acceso`, { cedulaPaciente });
+};
 export default apiClient;
