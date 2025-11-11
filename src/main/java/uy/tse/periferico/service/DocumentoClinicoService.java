@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import uy.tse.periferico.dto.DocumentoMetadataMensajeDTO; 
 import uy.tse.periferico.dto.DocumentoClinicoCreateDTO; // Importar el nuevo DTO
 import uy.tse.periferico.dto.DocumentoClinicoDTO;
 import uy.tse.periferico.exception.ResourceNotFoundException;
@@ -30,10 +31,11 @@ import java.util.UUID;
 public class DocumentoClinicoService {
 
     private final DocumentoClinicoRepository repository;
-     private final PacienteRepository pacienteRepository; // Añadir dependencia
+    private final PacienteRepository pacienteRepository; // Añadir dependencia
     private final ProfesionalRepository profesionalRepository;
     private final TenantConfiguracionRepository configRepository;
     private final ObjectMapper objectMapper; // Spring Boot inyecta un ObjectMapper por defecto
+    private final HcenRestNotifierService notifierService;
 
 
 
@@ -71,6 +73,24 @@ public class DocumentoClinicoService {
 
         // 4. Guardar y devolver el DTO
         DocumentoClinico docGuardado = repository.save(nuevoDoc);
+
+        try {
+            DocumentoMetadataMensajeDTO mensajeDTO = new DocumentoMetadataMensajeDTO();
+            mensajeDTO.setPacienteGlobalId(docGuardado.getPaciente().getGlobalUserId());
+            mensajeDTO.setTenantSchemaName(tenantId);
+            mensajeDTO.setIdExternaDoc(docGuardado.getIdExternaDoc());
+            mensajeDTO.setTipoDocumento(docGuardado.getInstanciaMedica());
+
+            // Llamada síncrona al servicio de notificación
+            notifierService.notificarNuevoDocumento(mensajeDTO);
+
+        } catch (Exception e) {
+            // Si la notificación falla, simplemente imprimimos una advertencia en la consola
+            // pero no detenemos la operación. El documento ya se guardó localmente.
+            System.err.println("ADVERTENCIA: El documento se creó localmente, pero la notificación REST a HCEN falló. " +
+                               "El metadato no se registrará en el sistema central. Causa: " + e.getMessage());
+        }
+        
         TenantConfiguracion config = configRepository.findById(1).orElse(new TenantConfiguracion());
 
         try {
