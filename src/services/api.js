@@ -2,7 +2,7 @@
 
 import axios from 'axios';
 
-const API_URL = 'http://localhost:8082';
+const API_URL = 'https://pruebamulti.web.elasticloud.uy';
 
 const apiClient = axios.create({
   baseURL: API_URL,
@@ -21,7 +21,7 @@ export const setAuthToken = (token) => {
 
 
 // ===========================================
-// === Funciones de Autenticación y Perfil ===
+// === Funciones de Autenticación y Perfil ===z
 // ===========================================
 
 export const login = (tenantId, username, password, userType) => {
@@ -77,4 +77,10 @@ export const createDocumentoClinico = (tenantId, data) => {
 export const solicitarAccesoPaciente = (tenantId, cedulaPaciente) => {
     return apiClient.post(`/${tenantId}/api/pacientes/solicitar-acceso`, { cedulaPaciente });
 };
+
+// --- NUEVA FUNCIÓN PARA DESACTIVAR PACIENTE ---
+export const desactivarPaciente = (tenantId, pacienteId) => {
+    return apiClient.put(`/${tenantId}/api/pacientes/${pacienteId}/desactivar`);
+};
+
 export default apiClient;

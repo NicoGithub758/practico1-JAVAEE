@@ -4,14 +4,15 @@ import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import apiClient from '../services/api';
 import { Link } from 'react-router-dom';
-import SolicitarAcceso from '../components/SolicitarAcceso'; // AÑADIR IMPORT
+import SolicitarAcceso from '../components/SolicitarAcceso';
+import GestionarPacientes from '../components/GestionarPacientes'; // --- IMPORTAR NUEVO COMPONENTE ---
 
 const DashboardPage = () => {
     const { user, logout } = useAuth();
     const [documento, setDocumento] = useState(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
-    const [docId, setDocId] = useState('DOC-TENANT_A-1234abcd'); // Actualizado para que sea un ejemplo válido
+    const [docId, setDocId] = useState('DOC-TENANT_A-1234abcd');
 
     const fetchDocumento = async () => {
         if (!user) return;
@@ -32,7 +33,7 @@ const DashboardPage = () => {
     return (
         <div style={{ padding: '20px', fontFamily: 'sans-serif', maxWidth: '900px', margin: 'auto' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #eee', paddingBottom: '10px' }}>
-                <h1>Dashboard</h1>
+                <h1>Dashboard Profesional</h1>
                 <div>
                     <Link to={`/${user?.tenant_id}/perfil`} style={{ marginRight: '20px', textDecoration: 'none', color: '#007bff', fontWeight: 'bold' }}>
                         Mi Perfil
@@ -56,8 +57,10 @@ const DashboardPage = () => {
                 </Link>
             </div>
 
-            {/* --- INTEGRACIÓN DEL NUEVO COMPONENTE --- */}
             <SolicitarAcceso />
+
+            {/* --- INTEGRACIÓN DEL NUEVO COMPONENTE --- */}
+            <GestionarPacientes />
 
             <div style={{ marginTop: '30px', padding: '20px', backgroundColor: '#f8f9fa', borderRadius: '8px' }}>
                 <h3>Consultar Documento Clínico (Local)</h3>
