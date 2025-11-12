@@ -35,7 +35,6 @@ const GestionarPacientes = () => {
         try {
             await desactivarPaciente(user.tenant_id, pacienteId);
             setMessage({ tipo: 'success', texto: '¡Paciente desactivado con éxito!' });
-            // Actualizamos la lista para reflejar el cambio de estado
             handleSearch();
         } catch (error) {
             const errorMsg = error.response?.data?.message || 'No se pudo desactivar el paciente.';
@@ -85,12 +84,14 @@ const GestionarPacientes = () => {
                             <td style={styles.td}>{p.nombre} {p.apellido}</td>
                             <td style={styles.td}>{p.nroDocumento}</td>
                             <td style={styles.td}>
-                                    <span style={p.estado === 'ACTIVO' ? styles.badgeActive : styles.badgeInactive}>
-                                        {p.estado}
+                                {/* --- CAMBIO 1: Usar el booleano 'activo' para el estilo y el texto --- */}
+                                <span style={p.activo ? styles.badgeActive : styles.badgeInactive}>
+                                        {p.activo ? 'ACTIVO' : 'DESACTIVADO'}
                                     </span>
                             </td>
                             <td style={styles.td}>
-                                {p.estado === 'ACTIVO' && (
+                                {/* --- CAMBIO 2: Usar el booleano 'activo' para mostrar el botón --- */}
+                                {p.activo && (
                                     <button
                                         style={styles.buttonDelete}
                                         onClick={() => handleDesactivar(p.pacienteId)}>
@@ -107,7 +108,7 @@ const GestionarPacientes = () => {
     );
 };
 
-// Estilos
+// ... (los estilos se mantienen igual) ...
 const styles = {
     card: { backgroundColor: 'white', padding: '25px', borderRadius: '8px', boxShadow: '0 4px 8px rgba(0,0,0,0.1)', borderLeft: '5px solid #6f42c1', marginTop: '30px' },
     cardIcon: { fontSize: '2.5rem', marginBottom: '15px', color: '#6f42c1' },
