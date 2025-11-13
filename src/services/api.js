@@ -104,4 +104,13 @@ export const desactivarPaciente = (tenantId, pacienteId) => {
     return apiClient.put(`/${tenantId}/api/pacientes/${pacienteId}/desactivar`);
 };
 
+// Obtiene la configuración pública del tenant (tema)
+export const getTenantConfig = (tenantId) => apiClient.get(`/${tenantId}/api/config`);
+
+// Actualiza la configuración del tenant (ADMIN)
+// Esta es la función que usará el formulario para guardar los cambios.
+export const updateTenantConfig = (tenantId, configData) => {
+    return apiClient.put(`/${tenantId}/api/admin/config`, configData);
+};
+
 export default apiClient;
