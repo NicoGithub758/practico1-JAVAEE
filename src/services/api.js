@@ -21,7 +21,7 @@ export const setAuthToken = (token) => {
 
 
 // ===========================================
-// === Funciones de Autenticación y Perfil ===
+// === Funciones de Autenticación y Perfil ===z
 // ===========================================
 
 export const login = (tenantId, username, password, userType) => {
@@ -93,6 +93,15 @@ export const getDocumentoExterno = (tenantId, cedulaPaciente, docId) => {
     return apiClient.get(`/${tenantId}/api/documento-externo`, {
         params: { cedulaPaciente, docId }
     });
+};
+// Solicita acceso para ver la historia de un paciente
+export const solicitarAccesoPaciente = (tenantId, cedulaPaciente) => {
+    return apiClient.post(`/${tenantId}/api/pacientes/solicitar-acceso`, { cedulaPaciente });
+};
+
+// --- NUEVA FUNCIÓN PARA DESACTIVAR PACIENTE ---
+export const desactivarPaciente = (tenantId, pacienteId) => {
+    return apiClient.put(`/${tenantId}/api/pacientes/${pacienteId}/desactivar`);
 };
 
 export default apiClient;
