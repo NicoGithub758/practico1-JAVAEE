@@ -12,6 +12,8 @@ import AdminDashboardPage from './pages/AdminDashboardPage';
 import ManageProfesionalesPage from './pages/ManageProfesionalesPage';
 import EditProfesionalPage from './pages/EditProfesionalPage';
 import AdminSettingsPage from './pages/AdminSettingsPage';
+import HistoriaClinicaPage from './pages/HistoriaClinicaPage';
+import VerDocumentoLocalPage from './pages/VerDocumentoLocalPage'
 
 // --- PASO 1: Importar la nueva página de perfil ---
 import ProfilePage from './pages/ProfilePage';
@@ -39,6 +41,8 @@ function App() {
                             {/* --- PASO 2: Añadir la nueva ruta para el perfil --- */}
                             <Route path="perfil" element={<ProfilePage />} />
                             <Route path="crear-historia" element={<CrearHistoriaClinicaPage />} />
+                            <Route path="historia-paciente" element={<HistoriaClinicaPage />} />
+                            <Route path="documento/:idExternaDoc" element={<VerDocumentoLocalPage />} />
                         </Route>
 
                         {/* Rutas Protegidas para Administradores */}

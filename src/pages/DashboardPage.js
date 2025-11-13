@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import apiClient from '../services/api';
-import { Link } from 'react-router-dom'; // <-- PASO 1: Importar Link
+import { Link } from 'react-router-dom';
 
 const DashboardPage = () => {
     const { user, logout } = useAuth();
@@ -28,52 +28,73 @@ const DashboardPage = () => {
         }
     };
 
+    // --- CORRECCIÓN: Definimos el objeto 'styles' aquí ---
+    const styles = {
+        container: { padding: '20px', fontFamily: 'sans-serif', maxWidth: '900px', margin: 'auto' },
+        header: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #eee', paddingBottom: '10px' },
+        navLink: { marginRight: '20px', textDecoration: 'none', color: '#007bff', fontWeight: 'bold' },
+        logoutButton: { padding: '8px 12px', border: 'none', backgroundColor: '#dc3545', color: 'white', borderRadius: '5px', cursor: 'pointer' },
+        welcomeText: { marginTop: '20px' },
+        actionsContainer: { marginTop: '30px', padding: '20px', backgroundColor: '#e9f5ff', borderRadius: '8px', textAlign: 'center' },
+        actionButtonContainer: { display: 'flex', justifyContent: 'center', gap: '20px', flexWrap: 'wrap' },
+        actionButton: { padding: '12px 20px', fontSize: '1.1em', border: 'none', backgroundColor: '#28a745', color: 'white', borderRadius: '5px', cursor: 'pointer' },
+        consultContainer: { marginTop: '30px', padding: '20px', backgroundColor: '#f8f9fa', borderRadius: '8px' },
+        inputGroup: { display: 'flex', gap: '10px', alignItems: 'center' },
+        input: { padding: '8px', borderRadius: '5px', border: '1px solid #ccc' },
+        searchButton: { padding: '8px 12px', border: 'none', backgroundColor: '#007bff', color: 'white', borderRadius: '5px', cursor: 'pointer' },
+        errorText: { color: 'red', marginTop: '10px' },
+        resultsContainer: { marginTop: '20px', border: '1px solid #ccc', padding: '15px', borderRadius: '5px', backgroundColor: 'white' },
+        preformatted: { whiteSpace: 'pre-wrap', wordBreak: 'break-all' }
+    };
+
     return (
-        <div style={{ padding: '20px', fontFamily: 'sans-serif', maxWidth: '900px', margin: 'auto' }}>
-            {/* --- PASO 2: Estructura de cabecera mejorada --- */}
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #eee', paddingBottom: '10px' }}>
+        <div style={styles.container}>
+            <div style={styles.header}>
                 <h1>Dashboard</h1>
                 <div>
-                    {/* --- PASO 3: Enlace a la página de perfil --- */}
-                    <Link to={`/${user?.tenant_id}/perfil`} style={{ marginRight: '20px', textDecoration: 'none', color: '#007bff', fontWeight: 'bold' }}>
+                    <Link to={`/${user?.tenant_id}/perfil`} style={styles.navLink}>
                         Mi Perfil
                     </Link>
-                    <button onClick={logout} style={{padding: '8px 12px', border: 'none', backgroundColor: '#dc3545', color: 'white', borderRadius: '5px', cursor: 'pointer'}}>
+                    <button onClick={logout} style={styles.logoutButton}>
                         Cerrar Sesión
                     </button>
                 </div>
             </div>
 
-            <p style={{ marginTop: '20px' }}>
+            <p style={styles.welcomeText}>
                 Bienvenido, <strong>{user?.sub}</strong> (Tenant: {user?.tenant_id}).
             </p>
 
-             <div style={{ marginTop: '30px', padding: '20px', backgroundColor: '#e9f5ff', borderRadius: '8px', textAlign: 'center' }}>
+            <div style={styles.actionsContainer}>
                 <h2>Acciones Rápidas</h2>
-                <Link to={`/${user?.tenant_id}/crear-historia`}>
-                    <button style={{ padding: '12px 20px', fontSize: '1.1em', border: 'none', backgroundColor: '#28a745', color: 'white', borderRadius: '5px', cursor: 'pointer' }}>
-                        ➕ Crear Nueva Historia Clínica
-                    </button>
-                </Link>
+                <div style={styles.actionButtonContainer}>
+                    <Link to={`/${user?.tenant_id}/crear-historia`}>
+                        <button style={styles.actionButton}>➕ Crear Nueva Historia Clínica</button>
+                    </Link>
+                    <Link to={`/${user?.tenant_id}/historia-paciente`}>
+                        <button style={{...styles.actionButton, backgroundColor: '#17a2b8'}}>
+                            <i className="bi bi-search"></i> Consultar Historia HCEN
+                        </button>
+                    </Link>
+                </div>
             </div>
 
-            <div style={{ marginTop: '30px', padding: '20px', backgroundColor: '#f8f9fa', borderRadius: '8px' }}>
-                <h3>Consultar Documento Clínico</h3>
-                <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+            <div style={styles.consultContainer}>
+                <h3>Consultar Documento Clínico Local</h3>
+                <div style={styles.inputGroup}>
                     <label>ID del Documento: </label>
-                    <input type="text" value={docId} onChange={(e) => setDocId(e.target.value)} style={{ padding: '8px', borderRadius: '5px', border: '1px solid #ccc' }} />
-                    <button onClick={fetchDocumento} disabled={loading} style={{ padding: '8px 12px', border: 'none', backgroundColor: '#007bff', color: 'white', borderRadius: '5px', cursor: 'pointer' }}>
+                    <input type="text" value={docId} onChange={(e) => setDocId(e.target.value)} style={styles.input} />
+                    <button onClick={fetchDocumento} disabled={loading} style={styles.searchButton}>
                         {loading ? 'Buscando...' : 'Buscar'}
                     </button>
                 </div>
 
-                {error && <p style={{color: 'red', marginTop: '10px'}}>{error}</p>}
+                {error && <p style={styles.errorText}>{error}</p>}
 
                 {documento && (
-                    <div style={{marginTop: '20px', border: '1px solid #ccc', padding: '15px', borderRadius: '5px', backgroundColor: 'white'}}>
+                    <div style={styles.resultsContainer}>
                         <h4>Resultado Encontrado:</h4>
-                        {/* Usamos <pre> para mantener el formato del JSON */}
-                        <pre style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-all' }}>
+                        <pre style={styles.preformatted}>
                             {JSON.stringify(documento, null, 2)}
                         </pre>
                     </div>

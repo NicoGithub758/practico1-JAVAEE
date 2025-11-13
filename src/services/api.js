@@ -73,4 +73,26 @@ export const createDocumentoClinico = (tenantId, data) => {
     return apiClient.post(`/${tenantId}/api/documentos`, data);
 };
 
+export const getHistoriaClinica = (tenantId, cedulaPaciente) => {
+    return apiClient.get(`/${tenantId}/api/historia-clinica/${cedulaPaciente}`);
+};
+
+export const getDocumentoLocal = (tenantId, docId) => {
+    return apiClient.get(`/${tenantId}/api/documentos/${docId}`);
+};
+
+export const solicitarAccesoHcen = (tenantId, { cedulaPaciente, idExternaDoc, motivo }) => {
+    return apiClient.post(`/${tenantId}/api/accesos/solicitar`, {
+        cedulaPaciente,
+        idExternaDoc,
+        motivo
+    });
+};
+
+export const getDocumentoExterno = (tenantId, cedulaPaciente, docId) => {
+    return apiClient.get(`/${tenantId}/api/documento-externo`, {
+        params: { cedulaPaciente, docId }
+    });
+};
+
 export default apiClient;
