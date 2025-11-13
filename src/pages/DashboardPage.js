@@ -4,13 +4,15 @@ import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import apiClient from '../services/api';
 import { Link } from 'react-router-dom';
+import SolicitarAcceso from '../components/SolicitarAcceso';
+import GestionarPacientes from '../components/GestionarPacientes'; // --- IMPORTAR NUEVO COMPONENTE ---
 
 const DashboardPage = () => {
     const { user, logout } = useAuth();
     const [documento, setDocumento] = useState(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
-    const [docId, setDocId] = useState('1');
+    const [docId, setDocId] = useState('DOC-TENANT_A-1234abcd');
 
     const fetchDocumento = async () => {
         if (!user) return;
@@ -48,11 +50,11 @@ const DashboardPage = () => {
     };
 
     return (
-        <div style={styles.container}>
-            <div style={styles.header}>
-                <h1>Dashboard</h1>
+        <div style={{ padding: '20px', fontFamily: 'sans-serif', maxWidth: '900px', margin: 'auto' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #eee', paddingBottom: '10px' }}>
+                <h1>Dashboard Profesional</h1>
                 <div>
-                    <Link to={`/${user?.tenant_id}/perfil`} style={styles.navLink}>
+                    <Link to={`/${user?.tenant_id}/perfil`} style={{ marginRight: '20px', textDecoration: 'none', color: '#007bff', fontWeight: 'bold' }}>
                         Mi Perfil
                     </Link>
                     <button onClick={logout} style={styles.logoutButton}>
@@ -65,7 +67,7 @@ const DashboardPage = () => {
                 Bienvenido, <strong>{user?.sub}</strong> (Tenant: {user?.tenant_id}).
             </p>
 
-            <div style={styles.actionsContainer}>
+            <div style={{ marginTop: '30px', padding: '20px', backgroundColor: '#e9f5ff', borderRadius: '8px', textAlign: 'center' }}>
                 <h2>Acciones Rápidas</h2>
                 <div style={styles.actionButtonContainer}>
                     <Link to={`/${user?.tenant_id}/crear-historia`}>
@@ -79,9 +81,14 @@ const DashboardPage = () => {
                 </div>
             </div>
 
-            <div style={styles.consultContainer}>
-                <h3>Consultar Documento Clínico Local</h3>
-                <div style={styles.inputGroup}>
+            <SolicitarAcceso />
+
+            {/* --- INTEGRACIÓN DEL NUEVO COMPONENTE --- */}
+            <GestionarPacientes />
+
+            <div style={{ marginTop: '30px', padding: '20px', backgroundColor: '#f8f9fa', borderRadius: '8px' }}>
+                <h3>Consultar Documento Clínico (Local)</h3>
+                <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
                     <label>ID del Documento: </label>
                     <input type="text" value={docId} onChange={(e) => setDocId(e.target.value)} style={styles.input} />
                     <button onClick={fetchDocumento} disabled={loading} style={styles.searchButton}>
@@ -94,7 +101,7 @@ const DashboardPage = () => {
                 {documento && (
                     <div style={styles.resultsContainer}>
                         <h4>Resultado Encontrado:</h4>
-                        <pre style={styles.preformatted}>
+                        <pre style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-all' }}>
                             {JSON.stringify(documento, null, 2)}
                         </pre>
                     </div>
