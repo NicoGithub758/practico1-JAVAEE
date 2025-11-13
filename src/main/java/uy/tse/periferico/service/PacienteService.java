@@ -9,9 +9,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate; // AÑADIDO
+import uy.tse.periferico.dto.PacienteCreateDTO;
+import uy.tse.periferico.exception.ResourceAlreadyExistsException;
 import uy.tse.periferico.model.Paciente;
 import uy.tse.periferico.repository.PacienteRepository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -72,4 +75,32 @@ public class PacienteService {
             throw new RuntimeException("Error de comunicación con el sistema central: " + e.getMessage());
         }
     }
+
+    @Transactional
+    public Paciente crearPacienteLocal(PacienteCreateDTO createDTO) {
+        // 1. Verificar si ya existe un paciente con esa cédula en este tenant
+        pacienteRepository.findByNroDocumento(createDTO.getNroDocumento()).ifPresent(p -> {
+            throw new ResourceAlreadyExistsException("Ya existe un paciente con la cédula " + createDTO.getNroDocumento() + " en este sistema.");
+        });
+
+        // 2. Mapear del DTO a la entidad Paciente
+        Paciente nuevoPaciente = new Paciente();
+        nuevoPaciente.setNombre(createDTO.getNombre());
+        nuevoPaciente.setApellido(createDTO.getApellido());
+        nuevoPaciente.setNroDocumento(createDTO.getNroDocumento());
+        nuevoPaciente.setSexo(createDTO.getSexo());
+        nuevoPaciente.setFechaNacimiento(createDTO.getFechaNacimiento());
+        nuevoPaciente.setEmail(createDTO.getEmail());
+
+        // 3. Establecer fechas de auditoría y dejar globalUserId nulo
+        LocalDateTime ahora = LocalDateTime.now();
+        nuevoPaciente.setFechaCreacion(ahora);
+        nuevoPaciente.setFechaModificacion(ahora);
+        // importante: globalUserId es null porque es un paciente 100% local
+        nuevoPaciente.setGlobalUserId(null);
+
+        // 4. Guardar en la base de datos (en el schema del tenant actual)
+        return pacienteRepository.save(nuevoPaciente);
+    }
+
 }

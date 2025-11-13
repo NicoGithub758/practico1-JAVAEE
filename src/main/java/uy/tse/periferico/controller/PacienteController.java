@@ -1,12 +1,14 @@
 package uy.tse.periferico.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import uy.tse.periferico.dto.PacienteCreateDTO;
 import uy.tse.periferico.model.Paciente;
 import uy.tse.periferico.service.PacienteService;
 
@@ -41,4 +43,11 @@ public class PacienteController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
+    @PostMapping(path = "/{tenantId}/api/admin/pacientes")
+    public ResponseEntity<Paciente> crearPacienteLocal(@RequestBody PacienteCreateDTO createDTO) {
+        Paciente pacienteCreado = pacienteService.crearPacienteLocal(createDTO);
+        return new ResponseEntity<>(pacienteCreado, HttpStatus.CREATED);
+    }
+
 }
