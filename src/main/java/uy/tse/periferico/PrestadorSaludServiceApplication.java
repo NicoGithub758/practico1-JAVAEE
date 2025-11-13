@@ -8,7 +8,6 @@ import uy.tse.periferico.config.SecurityConfig;
 
 @SpringBootApplication
 @EnableTransactionManagement
-@Import(SecurityConfig.class)
 public class PrestadorSaludServiceApplication {
 
 	public static void main(String[] args) {
