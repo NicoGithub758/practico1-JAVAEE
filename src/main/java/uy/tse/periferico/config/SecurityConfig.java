@@ -39,7 +39,7 @@ public class SecurityConfig {
 
                         // --- PASO 2: Definir las rutas de ADMIN ---
                         // Usamos hasRole("ADMIN") por consistencia. Es igual a hasAuthority("ROLE_ADMIN")
-                        .requestMatchers("/{tenantId}/api/admin/**").hasAuthority("ADMIN")
+                        .requestMatchers("/{tenantId}/api/admin/**").hasRole("ADMIN")
 
                         // --- PASO 3: Definir las rutas de PROFESIONAL ---
                         // Ruta para que el profesional edite su propio perfil
