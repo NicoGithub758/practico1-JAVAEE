@@ -2,16 +2,12 @@
 
 import React from 'react';
 import { useAuth } from '../context/AuthContext';
-// --- ¡LA LÍNEA MÁS IMPORTANTE! ---
-// Asegúrate de que esta línea esté presente y sea correcta.
 import { useNavigate } from 'react-router-dom';
-
-// Ajusta la ruta a tu componente si es necesario
 import ImportarPaciente from '../components/ImportarPaciente';
+import CrearPacienteAdmin from '../components/CrearPacienteAdmin'; // <-- PASO 1: IMPORTAR EL NUEVO COMPONENTE
 
 const AdminDashboardPage = () => {
     const { user, logout } = useAuth();
-    // Ahora 'useNavigate' está definido porque lo importamos arriba
     const navigate = useNavigate();
 
     const menuOptions = [
@@ -59,6 +55,7 @@ const AdminDashboardPage = () => {
 
             <div style={{ padding: '0 40px 40px 40px' }}>
                 <ImportarPaciente />
+                <CrearPacienteAdmin /> {/* <-- PASO 2: AÑADIR EL NUEVO COMPONENTE AL LAYOUT */}
             </div>
 
             <div style={styles.menuGrid}>
@@ -78,7 +75,7 @@ const AdminDashboardPage = () => {
     );
 };
 
-// ... Estilos sin cambios ...
+// Estilos (sin cambios)
 const styles = {
     container: { fontFamily: 'sans-serif', backgroundColor: '#f4f7f9', minHeight: '100vh' },
     header: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '20px 40px', backgroundColor: 'white', borderBottom: '1px solid #ddd' },

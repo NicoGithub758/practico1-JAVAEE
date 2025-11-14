@@ -2,21 +2,21 @@
 
 import axios from 'axios';
 
-const API_URL = 'http://localhost:8082';
+const API_URL = 'https://pruebamulti.web.elasticloud.uy';
 
 const apiClient = axios.create({
-  baseURL: API_URL,
-  headers: {
-    'Content-Type': 'application/json',
-  },
+    baseURL: API_URL,
+    headers: {
+        'Content-Type': 'application/json',
+    },
 });
 
 export const setAuthToken = (token) => {
-  if (token) {
-    apiClient.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-  } else {
-    delete apiClient.defaults.headers.common['Authorization'];
-  }
+    if (token) {
+        apiClient.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    } else {
+        delete apiClient.defaults.headers.common['Authorization'];
+    }
 };
 
 
@@ -25,8 +25,8 @@ export const setAuthToken = (token) => {
 // ===========================================
 
 export const login = (tenantId, username, password, userType) => {
-  const loginEndpoint = userType === 'admin' ? 'admin' : 'profesional';
-  return apiClient.post(`/${tenantId}/api/auth/login/${loginEndpoint}`, { username, password });
+    const loginEndpoint = userType === 'admin' ? 'admin' : 'profesional';
+    return apiClient.post(`/${tenantId}/api/auth/login/${loginEndpoint}`, { username, password });
 };
 
 // Obtiene los datos del perfil del profesional autenticado
@@ -104,13 +104,15 @@ export const desactivarPaciente = (tenantId, pacienteId) => {
     return apiClient.put(`/${tenantId}/api/pacientes/${pacienteId}/desactivar`);
 };
 
-// Obtiene la configuración pública del tenant (tema)
 export const getTenantConfig = (tenantId) => apiClient.get(`/${tenantId}/api/config`);
 
-// Actualiza la configuración del tenant (ADMIN)
-// Esta es la función que usará el formulario para guardar los cambios.
-export const updateTenantConfig = (tenantId, configData) => {
+export const updateAdminConfig = (tenantId, configData) => {
     return apiClient.put(`/${tenantId}/api/admin/config`, configData);
+};
+
+export const crearPacienteLocal = (tenantId, pacienteData) => {
+    // CORRECCIÓN: La URL correcta es la ruta base del AdminPacienteController
+    return apiClient.post(`/${tenantId}/api/admin/pacientes`, pacienteData);
 };
 
 export default apiClient;
