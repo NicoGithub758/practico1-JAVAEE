@@ -16,11 +16,12 @@ public class HcenDocumentoExternoService {
     @Value("${central.api.url.documento-externo}")
     private String hcenApiUrl;
 
-    public DocumentoDetalleDTO obtenerDocumento(String schemaSolicitante, String cedulaPaciente, String docId) {
+    public DocumentoDetalleDTO obtenerDocumento(String schemaSolicitante, String cedulaPaciente, String docId,Long idProfesional) {
         String url = UriComponentsBuilder.fromHttpUrl(hcenApiUrl)
                 .queryParam("schemaSolicitante", schemaSolicitante)
                 .queryParam("cedulaPaciente", cedulaPaciente)
                 .queryParam("docId", docId)
+                .queryParam("idProfesional", idProfesional)
                 .toUriString();
         try {
             return restTemplate.getForObject(url, DocumentoDetalleDTO.class);

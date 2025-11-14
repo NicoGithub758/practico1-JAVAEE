@@ -8,4 +8,6 @@ public class SolicitudAccesoRequestDTO {
     private String cedulaPaciente;
     private String idExternaDoc;
     private String motivo;
+    private Long idProfesionalSolicitante;
+    private String nombreProfesionalSolicitante;
 }
