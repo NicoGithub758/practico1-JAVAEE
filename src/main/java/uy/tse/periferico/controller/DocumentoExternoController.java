@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import uy.tse.periferico.dto.DocumentoDetalleDTO;
 import uy.tse.periferico.security.JwtTokenProvider;
 import uy.tse.periferico.service.HcenDocumentoExternoService;
+import uy.tse.periferico.dto.DocumentoClinicoDTO;
 
 @RestController
 @RequestMapping("/{tenantId}/api/documento-externo")
@@ -33,7 +34,7 @@ public class DocumentoExternoController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("El token no corresponde a un profesional válido o no contiene ID.");
         }
         
-        DocumentoDetalleDTO documento = documentoExternoService.obtenerDocumento(tenantId, cedulaPaciente, docId, profesionalId);
+        DocumentoClinicoDTO documento = documentoExternoService.obtenerDocumento(tenantId, cedulaPaciente, docId, profesionalId);
         return ResponseEntity.ok(documento);
     }
 }
