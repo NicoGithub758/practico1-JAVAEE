@@ -17,7 +17,7 @@ public class ImportacionPacienteService {
     private final RestTemplate restTemplate;
 
     // URL del API del central.
-    private static final String CENTRAL_API_URL = "http://localhost:8080/Laboratorio/api/usuarios/ci/";
+    private static final String CENTRAL_API_URL = "https://hcenuy.web.elasticloud.uy/Laboratorio/api/usuarios/ci/";
 
     @Autowired
     public ImportacionPacienteService(PacienteRepository pacienteRepository) {
