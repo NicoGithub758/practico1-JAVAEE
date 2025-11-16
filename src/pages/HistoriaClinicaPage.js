@@ -1,17 +1,16 @@
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { getHistoriaClinica, solicitarAccesoHcen, getDocumentoExterno } from '../services/api';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const HistoriaClinicaPage = () => {
     const { user } = useAuth();
+    const navigate = useNavigate();
     const [cedula, setCedula] = useState('');
     const [historia, setHistoria] = useState(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const [searchedCedula, setSearchedCedula] = useState('');
-
-    // Estado para gestionar el estado de CADA fila de documento individualmente
     const [docStatus, setDocStatus] = useState({});
 
     const handleSearch = async (e) => {
@@ -36,16 +35,17 @@ const HistoriaClinicaPage = () => {
         }
     };
 
-    const handleAccederExterno = async (idExternaDoc) => {
+     const handleAccederExterno = async (idExternaDoc) => {
         setDocStatus(prev => ({ ...prev, [idExternaDoc]: { status: 'loading' } }));
         try {
             const response = await getDocumentoExterno(user.tenant_id, searchedCedula, idExternaDoc);
-            // En un caso real, abrirías un modal. Por simplicidad, usamos un alert.
-            alert("Acceso concedido. Mostrando datos:\n" + JSON.stringify(response.data, null, 2));
-            setDocStatus(prev => ({ ...prev, [idExternaDoc]: { status: 'success', data: response.data } }));
+            
+            // --- CAMBIO CLAVE: Redirigir en lugar de mostrar alert ---
+            // Pasamos los datos del documento a través del 'state' de la navegación
+            navigate(`/${user.tenant_id}/documento-externo/${idExternaDoc}`, { state: { documento: response.data } });
+
         } catch (err) {
             if (err.response && err.response.status === 403) {
-                // El backend nos dijo que no hay permiso, cambiamos el estado para mostrar el botón de solicitar
                 setDocStatus(prev => ({ ...prev, [idExternaDoc]: { status: 'permission_denied', error: err.response.data } }));
             } else {
                 setDocStatus(prev => ({ ...prev, [idExternaDoc]: { status: 'error', error: 'Error al contactar a HCEN.' } }));
