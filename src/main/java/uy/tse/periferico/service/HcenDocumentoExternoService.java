@@ -5,14 +5,17 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
+
+import lombok.RequiredArgsConstructor;
 import uy.tse.periferico.dto.DocumentoDetalleDTO;
 import uy.tse.periferico.exception.AccesoNoAutorizadoException;
 import uy.tse.periferico.dto.DocumentoClinicoDTO;
 
 @Service
+@RequiredArgsConstructor
 public class HcenDocumentoExternoService {
 
-    private final RestTemplate restTemplate = new RestTemplate();
+    private final RestTemplate restTemplate;
 
     @Value("${central.api.url.documento-externo}")
     private String hcenApiUrl;

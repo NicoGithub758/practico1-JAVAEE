@@ -5,12 +5,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
+
+import lombok.RequiredArgsConstructor;
 import uy.tse.periferico.dto.SolicitudAccesoRequestDTO;
 
 @Service
+@RequiredArgsConstructor
 public class HcenAccesoService {
 
-    private final RestTemplate restTemplate = new RestTemplate();
+    private final RestTemplate restTemplate;
 
     @Value("${central.api.url.solicitud-acceso}")
     private String hcenApiUrl;

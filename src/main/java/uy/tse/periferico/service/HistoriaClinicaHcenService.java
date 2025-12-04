@@ -6,14 +6,18 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+
+import lombok.RequiredArgsConstructor;
 import uy.tse.periferico.dto.DocumentoMetadataHcenDTO;
+
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class HistoriaClinicaHcenService {
 
-    private final RestTemplate restTemplate = new RestTemplate();
+    private final RestTemplate restTemplate;
 
     @Value("${central.api.url.historia-clinica}")
     private String hcenApiUrl; // La URL base, ej: http://.../api/historia-clinica
